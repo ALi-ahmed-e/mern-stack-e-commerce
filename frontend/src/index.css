@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.cd{
+    @apply border-slate-300 rounded-lg  border-[1px] shadow-md dark:border-slate-800 hover:shadow-lg transition-all bg-white dark:bg-slate-800
+}
+
+.active{
+    @apply    underline;
+    color: rgb(59 130 246)!important;
+}
+
+.inpt{
+    @apply block outline-none p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 m-3
+}
