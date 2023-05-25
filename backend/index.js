@@ -13,7 +13,8 @@ require('./utils/passport')
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const authMiddleware = require('./middleware/authMiddleware');
-const roleMiddleware = require('./middleware/roleMiddleware');
+// const roleMiddleware = require('./middleware/roleMiddleware');
+const path = require("path")
 const authRoute = require('./routes/auth');
 const dashboardRoute = require('./routes/dashboard');
 const productRoute = require('./routes/products');
@@ -45,6 +46,13 @@ app.use(cors({
     credentials: true,
 }))
 
+const _dirname = path.resolve();
+
+app.use(express.static(path.join(_dirname, "../frontend/dist")));
+
+app.get("*", (req, res) =>
+  res.sendFile(path.join(_dirname, "../frontend/dist/index.html"))
+);
 
 app.listen(PORT, () => console.log(`app listening on ${PORT}`));
 connectToDb()
