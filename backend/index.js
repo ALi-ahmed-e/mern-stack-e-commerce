@@ -41,18 +41,11 @@ app.use(passport.session())
 app.use(cookieParser());
 app.use(express.json({limit: '100mb'}))
 app.use(cors({
-    origin: 'http://localhost:3000',
+    // origin: 'http://localhost:3000',
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
 }))
 
-const _dirname = path.resolve();
-
-app.use(express.static(path.join(_dirname, "../frontend/dist")));
-
-app.get("*", (req, res) =>
-  res.sendFile(path.join(_dirname, "../frontend/dist/index.html"))
-);
 
 app.listen(PORT, () => console.log(`app listening on ${PORT}`));
 connectToDb()
@@ -61,4 +54,11 @@ app.use('/api/auth', authRoute)
 app.use('/api/dashboard', authMiddleware, dashboardRoute)
 app.use('/api/product',productRoute)
 
+const _dirname = path.resolve();
+
+app.use(express.static(path.join(_dirname, "../frontend/dist")));
+
+app.get("*", (req, res) =>
+  res.sendFile(path.join(_dirname, "../frontend/dist/index.html"))
+);
 

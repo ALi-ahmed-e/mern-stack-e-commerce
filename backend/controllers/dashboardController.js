@@ -10,7 +10,6 @@ const dashboardData = async (req, res) => {
 
 
 
-
         const end30Date = new Date();
         const start30Date = new Date(end30Date.getTime() - 29 * 24 * 60 * 60 * 1000);
 
@@ -64,7 +63,6 @@ const dashboardData = async (req, res) => {
             Order.estimatedDocumentCount(),
             User.find({ provider: 'google' }).countDocuments()
         ]);
-
 
 
         const data = {

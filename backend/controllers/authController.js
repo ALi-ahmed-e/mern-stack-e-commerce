@@ -222,7 +222,7 @@ const mainGoogleAuth = async (req, res) => {
                 sameSite: "none",
             })
 
-            return res.redirect(process.env.CLIENT_URL)
+            return res.redirect('http://localhost:8000/')
         }
 
 
