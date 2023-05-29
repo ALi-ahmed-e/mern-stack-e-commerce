@@ -16,10 +16,13 @@ export const checkLoggedIn = createAsyncThunk('auth/checkLoggedIn', async (_, { 
         //check if user is logged in 
         const res = await axios.post(`/api/auth/checkLoggedIn`, null, { withCredentials: true })
 
+        // console.log(res.data)
+
         return res.data
 
     } catch (error) {
-        return rejectWithValue(error.response.data.message)
+
+        return rejectWithValue(error.response.data)
     }
 
 })
@@ -64,6 +67,25 @@ export const signIn = createAsyncThunk('auth/signIn', async (userData, { rejectW
 
 })
 
+
+
+export const editUser = createAsyncThunk('auth/edit User', async (data, { rejectWithValue, getState }) =>{
+
+    try {
+
+
+        const res = await axios.post("/api/user/edit-account",data,{withCredentials:true})
+
+        
+
+        return res.data
+
+    } catch (error) {
+
+        return rejectWithValue(error.response.data)
+    }
+
+})
 
 export const logOut = createAsyncThunk('auth/logOut', async (_, { rejectWithValue, getState }) => {
 
@@ -193,6 +215,21 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
             state.error.src = 'logout'
+            state.error.err = action.payload
+        })
+        //edit accont
+        builder.addCase(editUser.pending, (state, action) => {
+
+            state.isLoading = true
+        })
+        builder.addCase(editUser.fulfilled, (state, action) => {
+
+            state.isLoading = false
+            state.user = action.payload
+        })
+        builder.addCase(editUser.rejected, (state, action) => {
+            
+            state.isLoading = false
             state.error.err = action.payload
         })
 

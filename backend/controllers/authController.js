@@ -222,7 +222,8 @@ const mainGoogleAuth = async (req, res) => {
                 sameSite: "none",
             })
 
-            return res.redirect('http://localhost:8000/')
+            return res.redirect('http://localhost:3000/')
+            // return res.redirect('http://localhost:8000/')
         }
 
 
@@ -274,6 +275,8 @@ const checkLoggedIn = async (req, res) => {
     if (user) {
 
         const { password, ...clientUser } = user._doc
+
+        // res.cookie("user",clientUser)
 
 
         return res.status(200).json(clientUser)

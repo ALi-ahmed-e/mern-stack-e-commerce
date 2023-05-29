@@ -16,34 +16,43 @@ const authMiddleware = require('./middleware/authMiddleware');
 // const roleMiddleware = require('./middleware/roleMiddleware');
 const path = require("path")
 const authRoute = require('./routes/auth');
+const userRoute = require('./routes/user');
 const dashboardRoute = require('./routes/dashboard');
 const productRoute = require('./routes/products');
 
 
 app.use(session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie:{secure: true}
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: true }
 }))
 
 
 app.use(xss())
 app.use(rateLimiting({
-    windowMs:10*60*1000,
-    max:1200,
+  windowMs: 10 * 60 * 1000,
+  max: 1200,
 }))
-app.use(helmet())
+// app.use(helmet())
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "img-src": ["*", "data:"],
+    },
+  })
+);
 app.use(hpp())
 app.use(passport.initialize())
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(cookieParser());
-app.use(express.json({limit: '100mb'}))
+app.use(express.json({ limit: '100mb' }))
 app.use(cors({
-    // origin: 'http://localhost:3000',
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
+  origin: 'http://localhost:3000',
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true,
 }))
 
 
@@ -51,8 +60,9 @@ app.listen(PORT, () => console.log(`app listening on ${PORT}`));
 connectToDb()
 
 app.use('/api/auth', authRoute)
+app.use('/api/user', userRoute)
 app.use('/api/dashboard', authMiddleware, dashboardRoute)
-app.use('/api/product',productRoute)
+app.use('/api/product', productRoute)
 
 const _dirname = path.resolve();
 

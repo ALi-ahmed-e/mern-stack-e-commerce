@@ -115,6 +115,7 @@ const Products = () => {
                                                         className="object-cover w-10 h-10 rounded-full"
                                                         src={product.images[0]}
                                                         alt=""
+                                                        crossOrigin="anonymous" 
                                                     />
 
                                                 </div>

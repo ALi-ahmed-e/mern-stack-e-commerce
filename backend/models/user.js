@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: Number,
+    required:true,
   },
   addresses: {
     country: {
@@ -24,18 +25,12 @@ const UserSchema = new mongoose.Schema({
     city: {
       type: String,
     },
-    address1: {
-      type: String,
-    },
-    address2: {
+    address: {
       type: String,
     },
     zipCode: {
       type: Number,
-    },
-    addressType: {
-      type: String,
-    },
+    }
   }
   ,
   role: {

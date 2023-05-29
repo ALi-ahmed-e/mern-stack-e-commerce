@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { BsBell, BsCart2, BsSearch, BsShopWindow } from 'react-icons/bs'
@@ -43,7 +43,7 @@ const Header = () => {
                     <input
                         type="search"
                         id="default-search"
-                        className="block w-full rounded-2xl    outline-none px-2 py-3 pl-10 text-sm text-gray-900 border border-gray-300  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="block w-full rounded-2xl outline-none px-2 py-3 pl-10 text-sm text-gray-900 border border-gray-300  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search..."
                         required
                     />
@@ -69,7 +69,7 @@ const Header = () => {
                         <Menu.Button className='flex items-center focus:outline-none'>
                             <div className=' flex items-center mx-2 '>
 
-                                <img src={user.image} className="w-10 h-10 rounded-xl cursor-pointer ring-2" />
+                                <img crossOrigin="anonymous" src={user.image} className="w-10 h-10 rounded-xl cursor-pointer ring-2  object-cover" />
                             </div>
 
 
