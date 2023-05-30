@@ -28,6 +28,7 @@ app.use(session({
   cookie: { secure: true }
 }))
 
+console.log(process.env.TEST)
 
 app.use(xss())
 app.use(rateLimiting({

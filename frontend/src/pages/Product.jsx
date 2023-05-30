@@ -80,7 +80,7 @@ const Product = () => {
               {Product?.name}
             </h1>
             <div className="flex mb-4">
-              <span className="flex items-center">
+              {/* <span className="flex items-center">
                 <svg
                   fill="currentColor"
                   stroke="currentColor"
@@ -137,7 +137,7 @@ const Product = () => {
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
                 <span className="text-gray-600 ml-3">4 Reviews</span>
-              </span>
+              </span> */}
               <span className="flex ml-3 pl-3 py-2 border-l-2 border-gray-200 space-x-2s">
                 <a className="text-gray-500">
                   <svg
