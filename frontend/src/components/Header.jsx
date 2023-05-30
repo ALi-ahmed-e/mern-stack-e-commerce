@@ -103,18 +103,6 @@ const Header = () => {
                                     )}
                                 </Menu.Item>
 
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <p
-                                            onClick={() => dispatch(logOut())}
-                                            className={classNames(
-                                                active ? 'bg-gray-100 dark:bg-gray-900 dark:text-slate-100 text-gray-900  cursor-pointer flex justify-between' : 'text-gray-700 dark:text-slate-100 cursor-pointer flex justify-between', 'block px-4 py-2 text-sm  cursor-pointer'
-                                            )}
-                                        >
-                                            logout
-                                        </p>
-                                    )}
-                                </Menu.Item>
                                 {user?.role === 'admin' && <Menu.Item>
                                     {({ active }) => (
                                         <p
@@ -131,6 +119,18 @@ const Header = () => {
                             </div>
 
 
+                            <Menu.Item>
+                                    {({ active }) => (
+                                        <p
+                                            onClick={() => dispatch(logOut())}
+                                            className={classNames(
+                                                active ? 'bg-gray-100 dark:bg-gray-900 dark:text-slate-100 text-gray-900  cursor-pointer flex justify-between' : 'text-gray-700 dark:text-slate-100 cursor-pointer flex justify-between', 'block px-4 py-2 text-sm  cursor-pointer'
+                                            )}
+                                        >
+                                            logout
+                                        </p>
+                                    )}
+                                </Menu.Item>
                         </Menu.Items>
                     </Transition>
                 </Menu>

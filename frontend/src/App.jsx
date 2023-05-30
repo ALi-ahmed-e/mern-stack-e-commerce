@@ -23,7 +23,7 @@ import Profile from './pages/Profile'
 function App() {
   const dispatch = useDispatch()
   const { user, isLoading } = useSelector(s => s.Auth)
-  const { theme} = useSelector(s => s.Theme)
+  const { theme } = useSelector(s => s.Theme)
 
 
 
@@ -77,7 +77,7 @@ function App() {
       <div className=" min-h-screen dark:text-white dark:bg-gray-900 bg-[#eee]">
         <BrowserRouter>
           <Header />
-          {isLoading&&!user && <Loader />}
+          {isLoading && !user && <Loader />}
           <Routes>
 
             <Route path='/' element={<CheckAuth><Home /></CheckAuth>} />

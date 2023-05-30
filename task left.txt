@@ -1,4 +1,3 @@
-website modyfing
 landing page
 cart sys
 orders sys

@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MdAdminPanelSettings, MdAccountCircle, MdRadioButtonChecked } from 'react-icons/md'
 import { FiEdit } from 'react-icons/fi'
+import {BiLoaderAlt} from 'react-icons/bi'
 import { RadioGroup } from '@headlessui/react'
 import { editUser } from '../store/authSlice'
 import { setTheme } from '../store/themeSlice'
 
 const Profile = () => {
-    const { user } = useSelector(s => s.Auth)
+    const { user, isLoading } = useSelector(s => s.Auth)
     const [image, setimage] = useState()
     const [showWarn, setshowWarn] = useState(false)
     const dispatch = useDispatch()
@@ -28,7 +29,7 @@ const Profile = () => {
     const saveChanges = async (e) => {
         e.preventDefault()
         // console.log()
-        const data = { name: e.target.name.value, email: e.target.email.value, image, phoneNumber: e.target.phoneNumber.value, addresses: { zipCode: e.target.zipCode.value, address: e.target.address.value, city: e.target.city.value, country: e.target.country.value } }
+        const data = { name: e.target.name.value, gender: e.target.gender.value, email: e.target.email.value, image, phoneNumber: e.target.phoneNumber.value, addresses: { zipCode: e.target.zipCode.value, address: e.target.address.value, city: e.target.city.value, country: e.target.country.value } }
 
         console.log(data)
         dispatch(editUser(data))
@@ -69,9 +70,9 @@ const Profile = () => {
 
             <div className=' w-[99%] mx-auto p-3 flex-row flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
                 <div className=' w-full'>
-
+                    {/* name and email */}
                     <div className=' flex w-full '>
-
+                        {/* name */}
                         <div className="mb-6  w-1/2 mx-1 ">
                             <label
                                 htmlFor="name"
@@ -89,7 +90,7 @@ const Profile = () => {
                                 defaultValue={user?.name}
                             />
                         </div>
-
+                        {/* email */}
                         <div className="mb-6  w-1/2 mx-1 ">
                             <label
                                 htmlFor="name"
@@ -111,72 +112,54 @@ const Profile = () => {
                         </div>
 
                     </div>
-                    {/* 
-                    <div className=' flex w-full '>
-
-                        <div className="mb-6  w-1/2 mx-1 ">
+                    {/* gender and phone number */}
+                    <div className='mb-6 flex items-center'>
+                        {/* phone number */}
+                        <div className="  w-[70%] mx-1 ">
                             <label
-                                htmlFor="name"
+                                htmlFor="phoneNumber"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                                Your name
+                                Your phone number
                             </label>
                             <input
-                                type="text"
-                                id="name"
-                                name="name"
+                                type='tel'
+                                id="phoneNumber"
+                                name="phoneNumber"
+                                className="bg-gray-50 numberInput outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="phone number"
+                                required
+                                defaultValue={user?.phoneNumber}
+                            />
+                        </div>
+
+
+                        {/* gender */}
+                        <div className='w-[30%] mx-1'>
+                            <label
+                                htmlFor="gender"
+                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                                gender
+                            </label>
+                            <select
+                                defaultValue={user?.gender}
+                                id="gender"
+                                name='gender'
                                 className="bg-gray-50 outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="name"
-                                required
-                                defaultValue={user?.name}
-                            />
-                        </div>
-
-                        <div className="mb-6  w-1/2 mx-1 ">
-                            <label
-                                htmlFor="name"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                                Your email
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                className="bg-gray-50 outline-none border-none border border-gray-300 text-gray-900 text-center sm:text-left text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="email"
-                                required
-                                disabled={user?.provider == 'google'}
-                                defaultValue={user?.email}
-
-                            />
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                            </select>
                         </div>
 
-                    </div> */}
-
-
-                    <div className="mb-6  w-full mx-1 ">
-                        <label
-                            htmlFor="phoneNumber"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >
-                            Your phone number
-                        </label>
-                        <input
-                            type="text"
-                            id="phoneNumber"
-                            name="phoneNumber"
-                            className="bg-gray-50 outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="phone number"
-                            required
-                            defaultValue={user?.phoneNumber}
-                        />
                     </div>
 
+
+                    {/* address and zipcode */}
                     <div className=' flex items-center'>
 
-
-
+                        {/* zip code */}
                         <div className="mb-6 w-[20%]">
                             <label
                                 htmlFor="zipCode"
@@ -195,6 +178,7 @@ const Profile = () => {
                             />
                         </div>
 
+                        {/* address */}
 
                         <div className="mb-6 w-[80%] mx-2">
                             <label
@@ -217,25 +201,25 @@ const Profile = () => {
                     </div>
 
 
-
+                    {/* city and country */}
                     <div className=' flex w-full'>
 
                         <div className='w-1/2 m-1'>
                             <label
-                                htmlFor="countries"
+                                htmlFor="city"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
                                 city
                             </label>
                             <select
                                 defaultValue={user?.addresses?.city}
-                                id="countries"
+                                id="city"
                                 name='city'
                                 className="bg-gray-50 outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             >
                                 <option value="el hegaz">el hegaz</option>
                                 <option value="ain shams">ain shams</option>
-                                <option value="matarya">matarya</option>
+                                <option value="matarya" className=''>matarya</option>
                             </select>
                         </div>
 
@@ -266,7 +250,7 @@ const Profile = () => {
 
 
             </div>
-
+            {/* theme */}
             <div className=' w-[99%] mx-auto  p-3 flex-row flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
 
 
@@ -369,7 +353,9 @@ const Profile = () => {
 
             <div className=' text-center w-[99%] mx-auto p-3 flex-row flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
 
-                <button className=' mx-auto w-[95%] py-2 bg-green-600 hover:bg-green-700 text-white rounded-md' type='submit'>submit</button>
+                <button disabled={isLoading} className=' mx-auto w-[95%] py-2 bg-green-600 hover:bg-green-700 text-white rounded-md' type='submit'>
+                    {isLoading?<BiLoaderAlt className=' mx-auto animate-spin' size='30' />:'submit'}
+                </button>
 
             </div>
 

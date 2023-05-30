@@ -11,6 +11,7 @@ const editUser = async (req, res) => {
 
         const updatedUser = await User.findById(req.user._id)
 
+        
 
         return res.status(200).json(updatedUser);
 

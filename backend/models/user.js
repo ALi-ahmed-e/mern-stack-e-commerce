@@ -52,7 +52,13 @@ const UserSchema = new mongoose.Schema({
     type: Array,
     default: [],
     ref:'Product',
-  },gender:{
+  },
+  favourites:{
+    type: Array,
+    default: [],
+    ref:'Product',
+  },
+  gender:{
     type: String,
     default: 'Male',
   }
