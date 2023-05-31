@@ -4,13 +4,19 @@ const { default: mongoose } = require("mongoose");
 
 const cartProduct = new mongoose.Schema({
   product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
+    type: mongoose.Types.ObjectId,
+    ref: 'Proudct',
   },
-  quant:{
-    type:Number
+  color:{
+    type:String,
   },
-  
+  size:{
+    type:String
+  },
+  quant: {
+    type: Number
+  },
+
 })
 
 
@@ -30,7 +36,6 @@ const UserSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: Number,
-    required: true,
   },
   addresses: {
     country: {
@@ -63,8 +68,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
   },
   cart: {
-    type: Array,
-    default: [cartProduct],
+    type:[cartProduct],
   },
   whishlist: {
     type: Array,

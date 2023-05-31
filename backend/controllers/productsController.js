@@ -131,40 +131,57 @@ const getProduct = async (req, res) => {
     }
 }
 
-const addProductToCart = async (req, res) => {
-    const { productID, quant } = req.body
+const toggleProductToCart = async (req, res) => {
+    const { productID, quant, color, size } = req.body
     try {
 
-        const cartProduct = {
-            product: productID,
-            quant
+
+        const user = await User.findById(req.user._id)
+
+        const isProductExists = user?.cart?.some(cartItem => cartItem.product.equals(productID));
+
+        if (isProductExists) {
+
+
+            await User.findByIdAndUpdate(req.user._id, { $pull: { cart: { product: productID } } })
+
+            return res.status(200).json('product removed from cart')
+
+        } else {
+
+            const cartProduct = {
+                product: productID,
+                quant,
+                color,
+                size
+            }
+
+            await User.findByIdAndUpdate(req.user._id, {
+                $push: { cart: cartProduct }
+            })
+
+
+            return res.status(200).json('product added to cart')
         }
-
-        await User.findByIdAndUpdate(req.user._id, {
-            $push: { cart: cartProduct }
-        })
-
-        // await currentuser.updateOne({ $push: { following: id } })
-
-        res.status(200).json('product added to cart')
 
 
     } catch (error) {
-        res.status(400).json(error.message)
+        return res.status(400).json(error.message)
     }
 
 
 }
-const getCartProducts = async(req,res)=>{
-try {
-    const cart = await User.findById(req.user._id,'cart').populate({
-        path:'Product'
-    })
-    res.status(200).json(cart)
 
-} catch (error) {
-    res.status(400).json(error.message)
-}
+
+const getCartProducts = async (req, res) => {
+    try {
+        const cart = await User.findById(req.user._id, 'cart -_id').populate('cart.product')
+        
+        res.status(200).json(cart.cart)
+
+    } catch (error) {
+        res.status(400).json(error.message)
+    }
 }
 
 module.exports = {
@@ -173,6 +190,6 @@ module.exports = {
     deleteProduct,
     editProduct,
     getProduct,
-    addProductToCart,
+    toggleProductToCart,
     getCartProducts,
 }

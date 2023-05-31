@@ -1,4 +1,4 @@
-const { createProduct, getProducts, deleteProduct, editProduct, getProduct, addProductToCart, getCartProducts, } = require("../controllers/productsController");
+const { createProduct, getProducts, deleteProduct, editProduct, getProduct, getCartProducts, toggleProductToCart, } = require("../controllers/productsController");
 const roleMiddleware = require("../middleware/roleMiddleware");
 const authMiddleware = require('../middleware/authMiddleware');
 
@@ -15,7 +15,7 @@ router.post('/create-product', roleMiddleware, createProduct)
 
 router.delete('/delete-product/:_id', roleMiddleware, deleteProduct)
 
-router.post('/add-product-to-cart',authMiddleware, addProductToCart)
+router.post('/toggle-product-to-cart',authMiddleware, toggleProductToCart)
 
 router.get('/get-products', getProducts)
 
