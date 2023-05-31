@@ -1,5 +1,6 @@
 landing page
 cart sys
+whishlist sys
 orders sys
 search sys 
 notifications sys

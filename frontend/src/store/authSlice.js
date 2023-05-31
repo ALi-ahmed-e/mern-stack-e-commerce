@@ -73,7 +73,6 @@ export const editUser = createAsyncThunk('auth/edit User', async (data, { reject
 
     try {
 
-
         const res = await axios.post("/api/user/edit-account",data,{withCredentials:true})
 
         

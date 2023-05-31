@@ -1,5 +1,19 @@
 const { default: mongoose } = require("mongoose");
 
+
+
+const cartProduct = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+  },
+  quant:{
+    type:Number
+  },
+  
+})
+
+
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,11 +26,11 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required:true,
+    required: true,
   },
   phoneNumber: {
     type: Number,
-    required:true,
+    required: true,
   },
   addresses: {
     country: {
@@ -45,20 +59,19 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  provider:{
+  provider: {
     type: String,
   },
-  cart:{
+  cart: {
+    type: Array,
+    default: [cartProduct],
+  },
+  whishlist: {
     type: Array,
     default: [],
-    ref:'Product',
+    ref: 'Product',
   },
-  favourites:{
-    type: Array,
-    default: [],
-    ref:'Product',
-  },
-  gender:{
+  gender: {
     type: String,
     default: 'Male',
   }

@@ -5,6 +5,7 @@ import { getProduct } from '../store/productsSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AliceCarousel from 'react-alice-carousel'
 import { AiOutlineArrowRight } from 'react-icons/ai'
+import axios from 'axios'
 
 const Product = () => {
   const { id } = useParams()
@@ -23,11 +24,21 @@ const Product = () => {
     alt="ecommerce"
     className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
     src={img}
-    crossOrigin="anonymous" 
+    crossOrigin="anonymous"
   />)
 
 
 
+  const addToCart = async () => {
+    // const res = await axios.post('/api/product/add-product-to-cart', {
+    //   productID:id,
+    //   quant:1
+    // }, { withCredentials: true })
+  
+  
+    const res = await axios.get('/api/product/get-cart', { withCredentials: true })
+    console.log(res.data)
+  }
 
 
 
@@ -221,7 +232,7 @@ const Product = () => {
                   {Product?.discountPrice}$
                 </span>
               </>}
-              <button className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
+              <button onClick={addToCart} className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
                 Buy
               </button>
               <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">

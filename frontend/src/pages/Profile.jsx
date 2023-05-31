@@ -31,7 +31,7 @@ const Profile = () => {
         // console.log()
         const data = { name: e.target.name.value, gender: e.target.gender.value, email: e.target.email.value, image, phoneNumber: e.target.phoneNumber.value, addresses: { zipCode: e.target.zipCode.value, address: e.target.address.value, city: e.target.city.value, country: e.target.country.value } }
 
-        console.log(data)
+        
         dispatch(editUser(data))
     }
     return (
@@ -123,7 +123,9 @@ const Profile = () => {
                                 Your phone number
                             </label>
                             <input
-                                type='tel'
+                                type='number'
+                                minLength={10}
+                                maxLength={11}
                                 id="phoneNumber"
                                 name="phoneNumber"
                                 className="bg-gray-50 numberInput outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

@@ -1,4 +1,5 @@
-const Product = require("../models/proudct")
+const Product = require("../models/proudct");
+const User = require("../models/user");
 // const User = require("../models/user")
 // const Order = require("../models/order");
 const cloudinary = require("../utils/cloudinary");
@@ -39,13 +40,13 @@ const createProduct = async (req, res) => {
         res.status(200).json(newProduct)
     } catch (error) {
         console.log(error.message)
-        res.status(200).json(error.message)
+        res.status(400).json(error.message)
     }
 }
 
 
 const editProduct = async (req, res) => {
-    const { images, name, description, colors, sizes, tags, originalPrice, discountPrice, stock, category,id } = req.body;
+    const { images, name, description, colors, sizes, tags, originalPrice, discountPrice, stock, category, id } = req.body;
 
     let imagesLinks = []
 
@@ -71,13 +72,13 @@ const editProduct = async (req, res) => {
             images: imagesLinks,
         }
 
-        await Product.findByIdAndUpdate(id,productGf)
+        await Product.findByIdAndUpdate(id, productGf)
         const newProduct = await Product.findById(id)
 
         res.status(200).json(newProduct)
     } catch (error) {
         console.log(error.message)
-        res.status(200).json(error.message)
+        res.status(400).json(error.message)
     }
 }
 
@@ -93,7 +94,7 @@ const deleteProduct = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.status(200).json(error.message)
+        res.status(400).json(error.message)
     }
 }
 
@@ -108,15 +109,15 @@ const getProducts = async (req, res) => {
         const number_of_products = await Product.find().countDocuments()
 
 
-        res.status(200).json({products,number_of_products,page})
+        res.status(200).json({ products, number_of_products, page })
     } catch (error) {
         console.log(error.message)
-        res.status(200).json(error.message)
+        res.status(400).json(error.message)
     }
 }
 
 const getProduct = async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params
 
     try {
         const product = await Product.findById(id)
@@ -126,8 +127,44 @@ const getProduct = async (req, res) => {
         res.status(200).json(product)
     } catch (error) {
         console.log(error.message)
-        res.status(200).json(error.message)
+        res.status(400).json(error.message)
     }
+}
+
+const addProductToCart = async (req, res) => {
+    const { productID, quant } = req.body
+    try {
+
+        const cartProduct = {
+            product: productID,
+            quant
+        }
+
+        await User.findByIdAndUpdate(req.user._id, {
+            $push: { cart: cartProduct }
+        })
+
+        // await currentuser.updateOne({ $push: { following: id } })
+
+        res.status(200).json('product added to cart')
+
+
+    } catch (error) {
+        res.status(400).json(error.message)
+    }
+
+
+}
+const getCartProducts = async(req,res)=>{
+try {
+    const cart = await User.findById(req.user._id,'cart').populate({
+        path:'Product'
+    })
+    res.status(200).json(cart)
+
+} catch (error) {
+    res.status(400).json(error.message)
+}
 }
 
 module.exports = {
@@ -136,4 +173,6 @@ module.exports = {
     deleteProduct,
     editProduct,
     getProduct,
+    addProductToCart,
+    getCartProducts,
 }
