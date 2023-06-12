@@ -64,6 +64,10 @@ const proudctSchema = new mongoose.Schema({
     sold_out: {
       type: Number,
       default: 0,
+    },
+    avilable:{
+      type:Boolean,
+      default:true
     }
   }, { timestamps: true })
 

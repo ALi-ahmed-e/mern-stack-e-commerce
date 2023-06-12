@@ -21,7 +21,10 @@ const Header = () => {
     //     user?.role !== 'admin'&&navigate('/')
     // }, [user]);
 
-
+    const searchSubmit = (e) => {
+        e.preventDefault()
+        navigate(`/search/${e.target.query.value}`)
+    }
 
 
     return (<>
@@ -33,7 +36,7 @@ const Header = () => {
 
 
 
-            <form className=' max-w-lg w-full hidden md:block'>
+            <form className=' max-w-lg w-full hidden md:block' onSubmit={(e) => searchSubmit(e)}>
 
                 <div className="relative">
                     <div className="absolute outline-none inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -45,6 +48,7 @@ const Header = () => {
                         id="default-search"
                         className="block w-full rounded-2xl outline-none px-2 py-3 pl-10 text-sm text-gray-900 border border-gray-300  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search..."
+                        name='query'
                         required
                     />
                     <button
@@ -59,8 +63,8 @@ const Header = () => {
 
             {user && <div className=' flex items-center mx-2 '>
 
-                <BsBell size={24} className=' mx-3 cursor-pointer' />
-                <BsCart2 size={24} className=' mx-3 cursor-pointer' />
+                {/* <BsBell size={24} className=' mx-3 cursor-pointer' /> */}
+                <BsCart2 onClick={() => navigate('/cart')} size={24} className=' mx-3 cursor-pointer' />
 
 
 
@@ -103,6 +107,19 @@ const Header = () => {
                                     )}
                                 </Menu.Item>
 
+                                <Menu.Item>
+                                    {({ active }) => (
+                                        <p
+                                            onClick={() => navigate('/whishlist')}
+                                            className={classNames(
+                                                active ? 'bg-gray-100 dark:bg-gray-900 dark:text-slate-100 text-gray-900  cursor-pointer flex justify-between' : 'text-gray-700 dark:text-slate-100 cursor-pointer flex justify-between', 'block px-4 py-2 text-sm  cursor-pointer'
+                                            )}
+                                        >
+                                            whishlist
+                                        </p>
+                                    )}
+                                </Menu.Item>
+
                                 {user?.role === 'admin' && <Menu.Item>
                                     {({ active }) => (
                                         <p
@@ -120,17 +137,17 @@ const Header = () => {
 
 
                             <Menu.Item>
-                                    {({ active }) => (
-                                        <p
-                                            onClick={() => dispatch(logOut())}
-                                            className={classNames(
-                                                active ? 'bg-gray-100 dark:bg-gray-900 dark:text-slate-100 text-gray-900  cursor-pointer flex justify-between' : 'text-gray-700 dark:text-slate-100 cursor-pointer flex justify-between', 'block px-4 py-2 text-sm  cursor-pointer'
-                                            )}
-                                        >
-                                            logout
-                                        </p>
-                                    )}
-                                </Menu.Item>
+                                {({ active }) => (
+                                    <p
+                                        onClick={() => dispatch(logOut())}
+                                        className={classNames(
+                                            active ? 'bg-gray-100 dark:bg-gray-900 dark:text-slate-100 text-gray-900  cursor-pointer flex justify-between' : 'text-gray-700 dark:text-slate-100 cursor-pointer flex justify-between', 'block px-4 py-2 text-sm  cursor-pointer'
+                                        )}
+                                    >
+                                        logout
+                                    </p>
+                                )}
+                            </Menu.Item>
                         </Menu.Items>
                     </Transition>
                 </Menu>
@@ -151,7 +168,7 @@ const Header = () => {
 
         </div>
         <div className=' md:hidden  w-full h-16 bg-white dark:bg-slate-800 flex justify-center items-center '>
-            <form className=' max-w-lg w-full'>
+            <form onSubmit={(e) => searchSubmit(e)} className=' max-w-lg w-full'>
 
                 <div className="relative">
                     <div className="absolute outline-none inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -163,6 +180,7 @@ const Header = () => {
                         // id="default-search"
                         className="block w-full rounded-2xl    outline-none px-2 py-3 pl-10 text-sm text-gray-900 border border-gray-300  bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search..."
+                        name='query'
                         required
                     />
                     <button

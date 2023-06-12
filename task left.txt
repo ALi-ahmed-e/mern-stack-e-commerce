@@ -1,7 +1,8 @@
-landing page
-cart sys
-whishlist sys
+landing page //
+cart sys //
+whishlist sys //
 orders sys
-search sys 
+search sys //
 notifications sys
-...
+cart sys enhance
+whishlist enhance

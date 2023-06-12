@@ -69,13 +69,13 @@ export const signIn = createAsyncThunk('auth/signIn', async (userData, { rejectW
 
 
 
-export const editUser = createAsyncThunk('auth/edit User', async (data, { rejectWithValue, getState }) =>{
+export const editUser = createAsyncThunk('auth/edit User', async (data, { rejectWithValue, getState }) => {
 
     try {
 
-        const res = await axios.post("/api/user/edit-account",data,{withCredentials:true})
+        const res = await axios.post("/api/user/edit-account", data, { withCredentials: true })
 
-        
+
 
         return res.data
 
@@ -102,6 +102,22 @@ export const logOut = createAsyncThunk('auth/logOut', async (_, { rejectWithValu
 
 
 
+export const addProductToWhishlist = createAsyncThunk('auth/addProductToWhishlist', async ({ productID }, { rejectWithValue, getState, dispatch }) => {
+    try {
+        //add Product To Cart
+        const res = await axios.put('/api/product/add-product-whishlist', { productID }, { withCredentials: true })
+
+        return { productID, res: res.data }
+
+    } catch (error) {
+        return rejectWithValue(error.response.data.message)
+    }
+
+})
+
+
+
+
 const initstate = {
     user: null,
     isLoading: false,
@@ -119,11 +135,17 @@ const AuthSlice = createSlice({
     name: "Auth",
     initialState: initstate,
     reducers: {
-        loginSuccess: (state, action) => {
-            state.user = action.payload
-        },
-        setUser: (state, action) => {
-            state.user = action.payload
+        toggleToCart: (state, action) => {
+            // console.log(state.user.cart.some(product => product.product == action.payload.product))
+            if (action.payload.state == 'remove') {
+
+                const newCart = state.user.cart.filter(e => e.product != action.payload.productID)
+
+                state.user.cart = newCart
+
+            } else {
+                state.user.cart.push(action.payload.product)
+            }
         },
     },
     extraReducers: (builder) => {
@@ -227,7 +249,24 @@ const AuthSlice = createSlice({
             state.user = action.payload
         })
         builder.addCase(editUser.rejected, (state, action) => {
-            
+
+            state.isLoading = false
+            state.error.err = action.payload
+        })
+        //addProductToWhishlist
+        builder.addCase(addProductToWhishlist.fulfilled, (state, action) => {
+
+            state.isLoading = false
+            if (action.payload.res == 'added succesfuly') {
+
+                state.user.whishlist.push(action.payload.productID)
+            } else {
+                const newWhishlist = state.user.whishlist.filter(wp => wp != action.payload.productID)
+                state.user.whishlist = newWhishlist
+            }
+        })
+        builder.addCase(addProductToWhishlist.rejected, (state, action) => {
+
             state.isLoading = false
             state.error.err = action.payload
         })
@@ -237,4 +276,4 @@ const AuthSlice = createSlice({
 
 
 export default AuthSlice.reducer
-export const { loginSuccess, setUser } = AuthSlice.actions
+export const { toggleToCart } = AuthSlice.actions

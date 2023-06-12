@@ -17,6 +17,9 @@ import Product from './pages/Product'
 import ModifyShop from './components/dashboard_components/ModifyShop'
 import Errorr404 from './pages/Errorr404'
 import Profile from './pages/Profile'
+import Cart from './pages/Cart'
+import Whishlist from './pages/Whishlist'
+import SearchProducts from './pages/SearchProducts'
 
 
 
@@ -80,7 +83,7 @@ function App() {
           {isLoading && !user && <Loader />}
           <Routes>
 
-            <Route path='/' element={<CheckAuth><Home /></CheckAuth>} />
+            <Route path='/' element={<Home />} />
 
             <Route path='/profile' element={<CheckAuth><Profile /></CheckAuth>} />
 
@@ -101,9 +104,22 @@ function App() {
 
             <Route path='/product/:id' element={<Product />} />
 
+            <Route path='/search/:query' element={<SearchProducts />} />
+
+
             <Route path='/login' element={<CheckNotAuth><SignIn /></CheckNotAuth>} />
+            
             <Route path='/register' element={<CheckNotAuth><Register /></CheckNotAuth>} />
+            
             <Route path='/users/:userId/verfiy/:token' element={<CheckNotAuth><VerfiyEmail /></CheckNotAuth>} />
+            
+
+            <Route path='/whishlist' element={<CheckAuth><Whishlist /></CheckAuth>} />
+
+            <Route path='/cart' element={<CheckAuth><Cart /></CheckAuth>} />
+
+
+
             <Route path='/*' element={<Errorr404 />} />
 
 

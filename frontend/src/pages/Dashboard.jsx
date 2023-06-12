@@ -20,7 +20,7 @@ const Dashboard = () => {
     return (
         <div className=' pb-10 db'>
 
-            <div className=' text-center py-2 rounded-t-[0px] cd  w-full'>
+            <div className=' text-center py-2 mt-2 rounded-t-[0px] mx-auto cd  w-[98%]'>
 
 
                 <ul className="flex py-5 justify-center flex-col font-medium  rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">

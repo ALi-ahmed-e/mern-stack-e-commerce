@@ -5,15 +5,10 @@ import HomeProducts from '../components/HomeProducts';
 const Home = () => {
   const dispatch = useDispatch()
   const { dbData } = useSelector(s => s.Dashboard)
-
-  // function getCookie(key) {
-  //   var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-  //   return b ? b.pop() : "";
-  // }
+  const { user} = useSelector(s => s.Auth)
 
   useEffect(() => {
-    dispatch(getSiteData())
-    // console.log(getCookie('user').toString())
+    dispatch(getSiteData(user?._id?user?._id:undefined))
   }, []);
 
   return (

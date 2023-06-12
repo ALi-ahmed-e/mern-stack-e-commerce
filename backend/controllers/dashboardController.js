@@ -211,11 +211,13 @@ const editSite = async (req, res) => {
 }
 
 const getSiteData = async(req, res) => {
+    const {uid} = req.params
     try {
 
         const DBdata = await DashBoardData.findById(process.env.ADMIN_DB_DOC_ID)
+        const role = await uid? User.findById(uid,'role -_id'):'not logged'
 
-        if (req.user.role == 'admin') {
+        if(role == 'admin') {
             return res.status(200).json(DBdata)
             
         } else {

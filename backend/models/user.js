@@ -2,21 +2,21 @@ const { default: mongoose } = require("mongoose");
 
 
 
-const cartProduct = new mongoose.Schema({
+const CartProduct = new mongoose.Schema({
   product: {
     type: mongoose.Types.ObjectId,
     ref: 'Proudct',
   },
-  color:{
-    type:String,
+  color: {
+    type: String,
   },
-  size:{
-    type:String
+  size: {
+    type: String
   },
   quant: {
     type: Number
   },
-
+  _id: String
 })
 
 
@@ -68,12 +68,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
   },
   cart: {
-    type:[cartProduct],
+    type: [CartProduct],
+    default:[]
   },
   whishlist: {
-    type: Array,
+    type: [mongoose.Types.ObjectId],
     default: [],
-    ref: 'Product',
+    ref: 'Proudct',
   },
   gender: {
     type: String,
@@ -81,5 +82,7 @@ const UserSchema = new mongoose.Schema({
   }
 }, { timestamps: true })
 
+// const CartProductM = mongoose.model('CartProduct', CartProduct)
 const User = mongoose.model('User', UserSchema)
 module.exports = User
+// module.exports = CartProductM

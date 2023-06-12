@@ -95,7 +95,7 @@ export const getSiteData = createAsyncThunk('dashboard/getSiteData', async (data
 
     try {
         //create Product
-        const res = await axios.post(`/api/dashboard/getSiteData`, data, { withCredentials: true })
+        const res = await axios.post(`/api/dashboard/getSiteData/${data}`, data, { withCredentials: true })
      
         return res.data
 

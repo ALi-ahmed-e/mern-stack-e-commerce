@@ -1,23 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { getProduct } from '../store/productsSlice'
+import { useNavigate, useParams } from 'react-router-dom'
+import { addProductToCart, getProduct } from '../store/productsSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AliceCarousel from 'react-alice-carousel'
-import { AiOutlineArrowRight } from 'react-icons/ai'
-import axios from 'axios'
+import { AiFillHeart, AiOutlineArrowRight, AiOutlineHeart } from 'react-icons/ai'
+import { addProductToWhishlist } from '../store/authSlice'
 
 const Product = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
   const { Product } = useSelector(s => s.Products)
-
-
-
+  const { user } = useSelector(s => s.Auth)
+  const [selectedColor, setselectedColor] = useState()
+  const [selectedSize, setselectedSize] = useState()
+  const navigate = useNavigate()
+  const [warnmsg, setwarnmsg] = useState()
   useEffect(() => {
     id && dispatch(getProduct(id))
   }, [id]);
 
+  // useEffect(() => {
+  //   Product && user?.cart.map(e => e.product == Product._id && setinCart(true))
+  // }, [Product, user])
 
 
 
@@ -32,25 +37,18 @@ const Product = () => {
 
 
   const addToCart = async () => {
-    const res = await axios.post('/api/product/toggle-product-to-cart', {
-      productID: id,
-      quant: 1,
-      color:'white',
-      size:'md'
-    }, { withCredentials: true })
+    if (id && selectedColor && selectedSize && selectedSize != 'select') {
+      setwarnmsg()
+      dispatch(addProductToCart({ id, quant: 1, color: selectedColor, size: selectedSize }))
+    
+    } else {
+      console.log('all fields are required ', { id, quant: 1, color: selectedColor, size: selectedSize })
+      setwarnmsg('all fields are required ')
+    }
 
-
-    console.log(res.data)
   }
 
 
-  const getCart = async () => {
-
-
-
-    const res = await axios.get('/api/product/get-cart', { withCredentials: true })
-    console.log(res.data)
-  }
 
 
 
@@ -148,13 +146,14 @@ const Product = () => {
             <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5 ">
               <div className="flex">
                 <span className="mr-3">Colors</span>
-                {Product?.colors.map(color => <button key={Math.random()} className={`border-2 border-gray-300 ml-1 bg-${color != 'white' ? color != 'black' ? `${color}-500` : color : color} rounded-full w-6 h-6 focus:outline-none`} />)}
+                {Product?.colors.map(color => <button onClick={() => setselectedColor(color)} key={Math.random()} style={{ background: color, border: selectedColor == color && "purple 4px solid" }} className={`border-2 border-gray-300 ml-1  rounded-full w-6 h-6 focus:outline-none`} />)}
               </div>
-              <div className="flex ml-6 items-center">
+              <div className="flex ml-2 items-center">
                 <span className="mr-3">Size</span>
                 <div className="relative">
-                  <select className="rounded dark:bg-slate-600 border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 text-base pl-3 pr-10">
-                    {Product?.sizes.map(size => <option key={Math.random()} defaultValue={size}>{size}</option>)}
+                  <select value={selectedSize} onChange={(e) => setselectedSize(e.target.value)} className={`  rounded dark:bg-slate-600 border appearance-none ${'border-gray-300'} py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 text-base pl-3 pr-10`}>
+                    <option>select</option>
+                    {Product?.sizes.map(size => <option key={Math.random()} >{size}</option>)}
                   </select>
                   <span className="absolute right-0 top-0 h-full w-10 text-center dark:text-gray-300 text-gray-600 pointer-events-none flex items-center justify-center">
                     <svg
@@ -186,29 +185,23 @@ const Product = () => {
                   {Product?.discountPrice}$
                 </span>
               </>}
-              <button onClick={addToCart} className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
-                add to cart
+              <button disabled={user?.cart?.some(e => e.product == Product?._id)} onClick={(e)=>{user?addToCart(e):navigate('/login')}} className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
+                {user?.cart?.some(e => e.product == Product?._id) ? 'already in cart' : 'add to cart'}
               </button>
 
-              <button onClick={getCart} className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
-                get cart
-              </button>
-              <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                <svg
-                  fill="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-                </svg>
+            
+                
+              <button onClick={() => {user?dispatch(addProductToWhishlist({productID:Product._id})):navigate('/login')}} className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+              {user?.whishlist?.some(pr => pr == Product?._id) ? <AiFillHeart size='24' className="h-6 w-6 -mx-2 text-red-600" /> : <AiOutlineHeart size='24' className="h-6 w-6 -mx-2" />}
+
               </button>
             </div>
           </div>
         </div>
       </div>
+      {warnmsg&&<div className="p-4 mb-4 -mt-9 flex items-center justify-center text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                <span className="font-medium ">{warnmsg}</span>
+            </div>}
     </section>
 
   )

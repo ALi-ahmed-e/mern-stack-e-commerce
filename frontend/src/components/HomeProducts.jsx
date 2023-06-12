@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
-import { AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai'
+import { AiFillHeart, AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getProducts } from '../store/dashboardSlice'
+import { addProductToWhishlist } from '../store/authSlice'
 
 const HomeProducts = () => {
+  const { user } = useSelector(s => s.Auth)
   const { products, page, number_of_products } = useSelector(s => s.Dashboard)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -15,7 +17,9 @@ const HomeProducts = () => {
   }, []);
 
 
-
+  const addTowhishList = (id) => {
+    dispatch(addProductToWhishlist({productID:id}))
+  }
 
 
 
@@ -51,20 +55,22 @@ const HomeProducts = () => {
             <div className=' flex items-center justify-between '>
 
               <div
-                //  onClick={()=>navigate(`/product/${product._id}`)}
+                onClick={() => { user?(user?.cart?.some(pr => pr.product == product._id) ? navigate('/cart') : navigate(`/product/${product._id}`) ):navigate('/login')}}
                 className="flex w-full mr-2 items-center cursor-pointer justify-center rounded-md bg-indigo-800 hover:bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300"
+
               >
 
                 <AiOutlineShoppingCart size='24' className="mr-2 h-6 w-6" />
-                Add to cart
+                {user?.cart?.some(pr => pr.product == product._id) ? 'go to cart' : 'Add to cart'}
               </div>
 
               <div
-                //  onClick={()=>navigate(`/product/${product._id}`)}
+                onClick={() => {user?addTowhishList(product._id):navigate('/login')}}
                 className="flex items-center cursor-pointer justify-center rounded-md bg-indigo-800 hover:bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300"
               >
+                {user?.whishlist?.some(pr => pr == product._id) ? <AiFillHeart size='24' className="h-6  text-red-600 w-6 -mx-2" /> : <AiOutlineHeart size='24' className="h-6 w-6 -mx-2" />}
 
-                <AiOutlineHeart size='24' className="h-6 w-6 -mx-2" />
+
               </div>
             </div>
 

@@ -61,7 +61,7 @@ connectToDb()
 
 app.use('/api/auth', authRoute)
 app.use('/api/user', userRoute)
-app.use('/api/dashboard', authMiddleware, dashboardRoute)
+app.use('/api/dashboard', dashboardRoute)
 app.use('/api/product', productRoute)
 
 const _dirname = path.resolve();

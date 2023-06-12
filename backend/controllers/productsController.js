@@ -1,9 +1,10 @@
 const Product = require("../models/proudct");
+// const CartProductM = require("../models/user");
 const User = require("../models/user");
 // const User = require("../models/user")
 // const Order = require("../models/order");
 const cloudinary = require("../utils/cloudinary");
-
+const { v4: uuidv4 } = require('uuid');
 
 
 
@@ -145,15 +146,17 @@ const toggleProductToCart = async (req, res) => {
 
             await User.findByIdAndUpdate(req.user._id, { $pull: { cart: { product: productID } } })
 
-            return res.status(200).json('product removed from cart')
+            return res.status(200).json({ state: 'remove', productID })
 
         } else {
+            const _id = uuidv4().replace(/-/g, '').slice(0, 25)
 
             const cartProduct = {
                 product: productID,
                 quant,
                 color,
-                size
+                size,
+                _id
             }
 
             await User.findByIdAndUpdate(req.user._id, {
@@ -161,7 +164,7 @@ const toggleProductToCart = async (req, res) => {
             })
 
 
-            return res.status(200).json('product added to cart')
+            return res.status(200).json({ state: 'add', product: cartProduct })
         }
 
 
@@ -175,9 +178,118 @@ const toggleProductToCart = async (req, res) => {
 
 const getCartProducts = async (req, res) => {
     try {
-        const cart = await User.findById(req.user._id, 'cart -_id').populate('cart.product')
-        
-        res.status(200).json(cart.cart)
+        const { cart } = await User.findById(req.user._id, 'cart -_id').populate('cart.product')
+        let subTotal = 0
+        let numberOfAvilableProductsInCart = 0
+
+        cart.map(({ product, quant }) => {
+            if (product.avilable) {
+                subTotal += (parseInt(product.discountPrice) * parseInt(quant))
+                numberOfAvilableProductsInCart++
+            }
+        })
+
+
+        res.status(200).json({ cart, subTotal, numberOfAvilableProductsInCart })
+
+    } catch (error) {
+        res.status(400).json(error.message)
+    }
+}
+
+
+const changeProdQuant = async (req, res) => {
+    const { cartProductId, quant } = req.body;
+
+    try {
+        const user = await User.findById(req.user._id);
+
+        // if (!user) {
+        //     return res.status(404).send({ message: 'User not found' });
+        // }
+
+        const cartProduct = user.cart.id(cartProductId);
+
+        if (!cartProduct) {
+            return res.status(404).send({ message: 'Cart product not found' });
+        }
+
+        if (quant <= 1) {
+            cartProduct.quant = 1;
+        } else {
+            cartProduct.quant = quant
+        }
+
+
+
+        await user.save();
+
+        res.status(200).json(user.cart);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server error' });
+    }
+
+
+}
+
+
+const addProdToWhishList = async (req, res) => {
+    const { productID } = req.body;
+
+    try {
+        const { whishlist } = await User.findById(req.user._id, 'whishlist -_id')
+
+        if (whishlist.includes(productID)) {
+            await User.findByIdAndUpdate(req.user._id, {
+                $pull: { whishlist: productID }
+            });
+            return res.status(200).json('removed succesfuly');
+
+        }
+        await User.findByIdAndUpdate(req.user._id, {
+            $push: { whishlist: productID }
+        });
+        return res.status(200).json('added succesfuly');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server error' });
+    }
+
+
+}
+
+const getWhishListProducts = async (req, res) => {
+    try {
+        const { whishlist } = await User.findById(req.user._id, 'whishlist -_id').populate('whishlist')
+
+        res.status(200).json(whishlist)
+
+    } catch (error) {
+        res.status(400).json(error.message)
+    }
+}
+
+const searchProducts = async (req, res) => {
+    const { page, limit, query } = req.query
+    const skip = (page - 1) * limit
+    try {
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: `.*${query}.*`, $options: 'i' } },
+                { description: { $regex: `.*${query}.*`, $options: 'i' } }
+            ]
+        }).skip(skip).limit(parseInt(limit))
+
+        const number_of_products = await Product.find({
+            $or: [
+                { name: { $regex: `.*${query}.*`, $options: 'i' } },
+                { description: { $regex: `.*${query}.*`, $options: 'i' } }
+            ]
+        }).countDocuments()
+
+
+        res.status(200).json({ products, number_of_products, page })
 
     } catch (error) {
         res.status(400).json(error.message)
@@ -192,4 +304,8 @@ module.exports = {
     getProduct,
     toggleProductToCart,
     getCartProducts,
+    changeProdQuant,
+    addProdToWhishList,
+    getWhishListProducts,
+    searchProducts,
 }

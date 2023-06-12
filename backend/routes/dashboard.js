@@ -1,15 +1,16 @@
 const { dashboardData, editSite, getSiteData } = require("../controllers/dashboardController");
+const authMiddleware = require("../middleware/authMiddleware");
 const roleMiddleware = require("../middleware/roleMiddleware");
 
 const router = require("express").Router();
 
 // router.post('/register',register)
 
-router.get('/getData', roleMiddleware, dashboardData)
+router.get('/getData', authMiddleware, dashboardData)
 
-router.post('/editSite', roleMiddleware, editSite)
+router.post('/editSite', authMiddleware, roleMiddleware, editSite)
 
-router.post('/getSiteData', getSiteData)
+router.post('/getSiteData/:uid', getSiteData)
 
 
 
