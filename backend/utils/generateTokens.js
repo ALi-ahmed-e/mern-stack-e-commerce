@@ -10,7 +10,7 @@ const generateTokens = async (user) => {
 
         const userToken = await UserToken.findOne({ userId: user._id })
         
-        if (userToken) await UserToken.findByIdAndDelete(userToken._id.toString())
+        // if (userToken) await UserToken.findByIdAndDelete(userToken._id.toString())
 
 
         await new UserToken({ userId: user._id, token: refreshToken }).save()

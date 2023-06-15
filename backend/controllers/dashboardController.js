@@ -1,7 +1,7 @@
-const Product = require("../models/proudct")
 const User = require("../models/user")
 const Order = require("../models/order");
 const DashBoardData = require("../models/dashboardData");
+const cloudinary = require("../utils/cloudinary");
 
 
 const dashboardData = async (req, res) => {
@@ -196,11 +196,21 @@ const editSite = async (req, res) => {
         //     deliverycoast,
         //     admins: [req.user._id]
         // })
+        const dbBanner = await DashBoardData.findById(process.env.ADMIN_DB_DOC_ID, 'banner')
 
-        await DashBoardData.findByIdAndUpdate(process.env.ADMIN_DB_DOC_ID, {
-            banner,
+        let Data = {
             deliverycoast,
-        })
+            banner
+        }
+
+
+        if (banner && banner != dbBanner.banner) {
+            console.log('first')
+            const uploadedImage = await cloudinary.uploader.upload(banner, { resource_type: 'image', folder: 'banner_Images' })
+            Data.banner = uploadedImage.secure_url
+        }
+
+        await DashBoardData.findByIdAndUpdate(process.env.ADMIN_DB_DOC_ID, Data)
         const DBdata = await DashBoardData.findById(process.env.ADMIN_DB_DOC_ID)
 
         return res.status(200).json(DBdata)
@@ -210,23 +220,23 @@ const editSite = async (req, res) => {
     }
 }
 
-const getSiteData = async(req, res) => {
-    const {uid} = req.params
+const getSiteData = async (req, res) => {
+    const { uid } = req.params
     try {
 
         const DBdata = await DashBoardData.findById(process.env.ADMIN_DB_DOC_ID)
-        const role = await uid? User.findById(uid,'role -_id'):'not logged'
+        const role = await uid ? User.findById(uid, 'role -_id') : 'not logged'
 
-        if(role == 'admin') {
+        if (role == 'admin') {
             return res.status(200).json(DBdata)
-            
+
         } else {
             const data = {
                 banner: DBdata.banner,
-                deliverycoast:DBdata.deliverycoast
+                deliverycoast: DBdata.deliverycoast
             }
             return res.status(200).json(data)
-            
+
         }
 
 

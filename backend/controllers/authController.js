@@ -176,7 +176,7 @@ const login = async (req, res) => {
 
 
 
-            res.status(400).json({message:'your email not verfiyed we sent link to your email address'})
+            res.status(400).json({ message: 'your email not verfiyed we sent link to your email address' })
 
         }
 
@@ -222,7 +222,7 @@ const mainGoogleAuth = async (req, res) => {
                 sameSite: "none",
             })
 
-            return process.env.STATE == 'dev'? res.redirect('http://localhost:3000/'):res.redirect(process.env.CLIENT_URL)
+            return res.redirect(process.env.CLIENT_URL)
         }
 
 

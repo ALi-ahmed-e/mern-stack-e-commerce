@@ -8,7 +8,59 @@ const Cart = () => {
   const deliverycoast = useSelector(s => s.Dashboard.dbData) != null ? useSelector(s => s.Dashboard.dbData.deliverycoast) : 0
   const dispatch = useDispatch()
 
+
+  // const renderPaypal = () => {
+  //   window.paypal.Buttons({
+  //     // Order is created on the server and the order id is returned
+  //     createOrder() {
+  //       return fetch("/my-server/create-paypal-order", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         // use the "body" param to optionally pass additional order information
+  //         // like product skus and quantities
+  //         body: JSON.stringify({
+  //           cart: [
+  //             {
+  //               sku: "YOUR_PRODUCT_STOCK_KEEPING_UNIT",
+  //               quantity: "YOUR_PRODUCT_QUANTITY",
+  //             },
+  //           ],
+  //         }),
+  //       })
+  //         .then((response) => response.json())
+  //         .then((order) => order.id);
+  //     },
+  //     // Finalize the transaction on the server after payer approval
+  //     onApprove(data) {
+  //       return fetch("/my-server/capture-paypal-order", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           orderID: data.orderID
+  //         })
+  //       })
+  //         .then((response) => response.json())
+  //         .then((orderData) => {
+  //           // Successful capture! For dev/demo purposes:
+  //           console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+  //           const transaction = orderData.purchase_units[0].payments.captures[0];
+  //           alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+  //           // When ready to go live, remove the alert and show a success message within this page. For example:
+  //           // const element = document.getElementById('paypal-button-container');
+  //           // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+  //           // Or go to another URL:  window.location.href = 'thank_you.html';
+  //         });
+  //     }
+  //   }).render('#paypal-button')
+  // }
+
   const getCart = () => {
+    // renderPaypal()
+
     dispatch(getCartProduct())
   }
 
@@ -38,12 +90,12 @@ const Cart = () => {
 
 
 
-      {cartProducts?.length > 0 ?  <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
+        {cartProducts?.length > 0 ? <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
 
 
           <div className="rounded-lg md:w-2/3">
 
-            { cartProducts?.map(product => <div key={Math.random()} className="justify-between mb-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow-md sm:flex sm:justify-start">
+            {cartProducts?.map(product => <div key={Math.random()} className="justify-between mb-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow-md sm:flex sm:justify-start">
               <img
                 src={product.product.images[0]}
                 alt="product-image"
@@ -79,7 +131,7 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
-            </div>) }
+            </div>)}
 
 
 
@@ -104,12 +156,14 @@ const Cart = () => {
                 {/* <p className="text-sm text-gray-700 dark:text-gray-200">including VAT</p> */}
               </div>
             </div>
-            <button disabled={numberOfAvilableProductsInCart <= 0} className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
-              Check out
-            </button>
+            <div id='paypal-button'>
+              <button disabled={numberOfAvilableProductsInCart <= 0} className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+                Check out
+              </button>
+            </div>
           </div>
 
-        </div>:<h1 className="my-10 text-center text-xl ">no items in your cart</h1>}
+        </div> : <h1 className="my-10 text-center text-xl ">no items in your cart</h1>}
 
       </div>
 
