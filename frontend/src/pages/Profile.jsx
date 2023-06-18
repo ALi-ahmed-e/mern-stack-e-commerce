@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MdAdminPanelSettings, MdAccountCircle, MdRadioButtonChecked } from 'react-icons/md'
 import { FiEdit } from 'react-icons/fi'
-import {BiLoaderAlt} from 'react-icons/bi'
-import { RadioGroup } from '@headlessui/react'
+import { BiLoaderAlt } from 'react-icons/bi'
+import { RadioGroup, Switch } from '@headlessui/react'
 import { editUser } from '../store/authSlice'
 import { setTheme } from '../store/themeSlice'
 
@@ -13,7 +13,7 @@ const Profile = () => {
     const [showWarn, setshowWarn] = useState(false)
     const dispatch = useDispatch()
     const { theme } = useSelector(s => s.Theme)
-
+    const [enabled, setenabled] = useState(user.allowAccessFromMultiplePlaces)
 
     const convertTo64Base = (file) => {
         setshowWarn(true)
@@ -25,13 +25,26 @@ const Profile = () => {
 
     }
 
+    
 
     const saveChanges = async (e) => {
         e.preventDefault()
-        // console.log()
-        const data = { name: e.target.name.value, gender: e.target.gender.value, email: e.target.email.value, image, phoneNumber: e.target.phoneNumber.value, addresses: { zipCode: e.target.zipCode.value, address: e.target.address.value, city: e.target.city.value, country: e.target.country.value } }
-
         
+        const data = {
+            name: e.target.name.value,
+            gender: e.target.gender.value,
+            email: e.target.email.value,
+            image, phoneNumber: e.target.phoneNumber.value,
+            allowAccessFromMultiplePlaces:enabled,
+            addresses: {
+                zipCode: e.target.zipCode.value,
+                address: e.target.address.value,
+                city: e.target.city.value,
+                country: e.target.country.value
+            }
+        }
+
+
         dispatch(editUser(data))
     }
     return (
@@ -68,7 +81,7 @@ const Profile = () => {
 
             </div>
 
-            <div className=' w-[99%] mx-auto p-3 flex-row flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
+            <div className=' w-[99%] mx-auto p-3 flex-col flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
                 <div className=' w-full'>
                     {/* name and email */}
                     <div className=' flex w-full '>
@@ -251,6 +264,24 @@ const Profile = () => {
                 </div>
 
 
+                <div className=' w-full  p-1 flex items-center justify-between'>
+                    Allow access to account from multiple places
+                    {/* <input type="checkbox" className=' w-6 h-6 ml-2' /> */}
+
+
+                    <Switch
+                        checked={enabled}
+                        onChange={setenabled}
+                        className={`${enabled ? 'bg-teal-900' : 'bg-teal-700'} relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                    >
+                        <span className="sr-only">Use setting</span>
+                        <span
+                            aria-hidden="true"
+                            className={`${enabled ? 'translate-x-9' : 'translate-x-0'} pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        />
+                    </Switch>
+                </div>
+
             </div>
             {/* theme */}
             <div className=' w-[99%] mx-auto  p-3 flex-row flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
@@ -356,7 +387,7 @@ const Profile = () => {
             <div className=' text-center w-[99%] mx-auto p-3 flex-row flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
 
                 <button disabled={isLoading} className=' mx-auto w-[95%] py-2 bg-green-600 hover:bg-green-700 text-white rounded-md' type='submit'>
-                    {isLoading?<BiLoaderAlt className=' mx-auto animate-spin' size='30' />:'submit'}
+                    {isLoading ? <BiLoaderAlt className=' mx-auto animate-spin' size='30' /> : 'submit'}
                 </button>
 
             </div>

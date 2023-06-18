@@ -8,10 +8,18 @@ const generateTokens = async (user) => {
 
         const refreshToken = jwt.sign({ user }, process.env.REFRESH_TOKEN_PRIVATE_KEY, { expiresIn: '30d' })
 
-        const userToken = await UserToken.findOne({ userId: user._id })
-        
-        // if (userToken) await UserToken.findByIdAndDelete(userToken._id.toString())
+        // const userToken = await UserToken.findOne({ userId: user._id })
 
+
+        // if (userToken) if (!user?.allowAccessFromMultiplePlaces) {
+        //     await UserToken.findByIdAndDelete(userToken._id.toString())
+        // }
+
+
+        if (!user?.allowAccessFromMultiplePlaces) {
+            
+            await UserToken.deleteMany({ userId: user._id });
+        }
 
         await new UserToken({ userId: user._id, token: refreshToken }).save()
 

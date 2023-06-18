@@ -67,9 +67,13 @@ const UserSchema = new mongoose.Schema({
   provider: {
     type: String,
   },
+  allowAccessFromMultiplePlaces: {
+    type: Boolean,
+    default:false
+  },
   cart: {
     type: [CartProduct],
-    default:[]
+    default: []
   },
   whishlist: {
     type: [mongoose.Types.ObjectId],
