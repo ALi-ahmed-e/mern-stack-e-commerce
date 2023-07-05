@@ -20,6 +20,8 @@ import Profile from './pages/Profile'
 import Cart from './pages/Cart'
 import Whishlist from './pages/Whishlist'
 import SearchProducts from './pages/SearchProducts'
+import Successful from './pages/Successful'
+import Orders from './pages/Orders'
 
 
 
@@ -117,6 +119,10 @@ function App() {
             <Route path='/whishlist' element={<CheckAuth><Whishlist /></CheckAuth>} />
 
             <Route path='/cart' element={<CheckAuth><Cart /></CheckAuth>} />
+            
+            <Route path='/order-creted-successfuly/:orderId' element={<CheckAuth><Successful /></CheckAuth>} />
+            
+            <Route path='/orders' element={<CheckAuth><Orders /></CheckAuth>} />
 
 
 

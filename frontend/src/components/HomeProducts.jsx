@@ -18,7 +18,7 @@ const HomeProducts = () => {
 
 
   const addTowhishList = (id) => {
-    dispatch(addProductToWhishlist({productID:id}))
+    dispatch(addProductToWhishlist({ productID: id }))
   }
 
 
@@ -27,58 +27,59 @@ const HomeProducts = () => {
   return (
     <div>
 
-      {products?.map(product => <div key={Math.random()} className=' inline-block  w-full  max-w-[400px] '>
-        <div className="relative m-1 flex w-full scale-[85%] max-w-[340px] mx-auto flex-col overflow-hidden rounded-lg border dark:border-slate-700 border-gray-100 dark:bg-slate-800 dark:text-white bg-white shadow-md">
-          <div
-            className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl cursor-pointer"
-            onClick={() => navigate(`/product/${product._id}`)}
-          >
-            <img
-              className="object-cover w-full "
-              src={product.images[0]}
-              alt="product image"
-            />
-          </div>
-          <div className="mt-4 px-5 pb-5">
-            <div onClick={() => navigate(`/product/${product._id}`)}>
-              <h5 className="text-xl tracking-tight text-slate-900 dark:text-white cursor-pointer">
-                {product.name}
-              </h5>
+      {products?.map(product =>
+        { return product.avilable &&<div key={Math.random()} className=' inline-block  w-full  max-w-[400px] '>
+          <div className="relative m-1 flex w-full scale-[85%] max-w-[340px] mx-auto flex-col overflow-hidden rounded-lg border dark:border-slate-700 border-gray-100 dark:bg-slate-800 dark:text-white bg-white shadow-md">
+            <div
+              className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl cursor-pointer"
+              onClick={() => navigate(`/product/${product._id}`)}
+            >
+              <img
+                className="object-cover w-full "
+                src={product.images[0]}
+                alt="product image"
+              />
             </div>
-            <div className="mt-2 mb-5 flex items-center justify-between dark:text-white text-slate-900">
-              <p>
-                <span className="text-3xl font-bold ">${product.discountPrice}</span>
-                <span className="text-sm  line-through">${product.originalPrice}</span>
-              </p>
-            </div>
-
-            <div className=' flex items-center justify-between '>
-
-              <div
-                onClick={() => { user?(user?.cart?.some(pr => pr.product == product._id) ? navigate('/cart') : navigate(`/product/${product._id}`) ):navigate('/login')}}
-                className="flex w-full mr-2 items-center cursor-pointer justify-center rounded-md bg-indigo-800 hover:bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300"
-
-              >
-
-                <AiOutlineShoppingCart size='24' className="mr-2 h-6 w-6" />
-                {user?.cart?.some(pr => pr.product == product._id) ? 'go to cart' : 'Add to cart'}
+            <div className="mt-4 px-5 pb-5">
+              <div onClick={() => navigate(`/product/${product._id}`)}>
+                <h5 className="text-xl tracking-tight text-slate-900 dark:text-white cursor-pointer">
+                  {product.name}
+                </h5>
+              </div>
+              <div className="mt-2 mb-5 flex items-center justify-between dark:text-white text-slate-900">
+                <p>
+                  <span className="text-3xl font-bold ">${product.discountPrice}</span>
+                  <span className="text-sm  line-through">${product.originalPrice}</span>
+                </p>
               </div>
 
-              <div
-                onClick={() => {user?addTowhishList(product._id):navigate('/login')}}
-                className="flex items-center cursor-pointer justify-center rounded-md bg-indigo-800 hover:bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300"
-              >
-                {user?.whishlist?.some(pr => pr == product._id) ? <AiFillHeart size='24' className="h-6  text-red-600 w-6 -mx-2" /> : <AiOutlineHeart size='24' className="h-6 w-6 -mx-2" />}
+              <div className=' flex items-center justify-between '>
+
+                <div
+                  onClick={() => { user ? (user?.cart?.some(pr => pr.product == product._id) ? navigate('/cart') : navigate(`/product/${product._id}`)) : navigate('/login') }}
+                  className="flex w-full mr-2 items-center cursor-pointer justify-center rounded-md bg-indigo-800 hover:bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300"
+
+                >
+
+                  <AiOutlineShoppingCart size='24' className="mr-2 h-6 w-6" />
+                  {user?.cart?.some(pr => pr.product == product._id) ? 'go to cart' : 'Add to cart'}
+                </div>
+
+                <div
+                  onClick={() => { user ? addTowhishList(product._id) : navigate('/login') }}
+                  className="flex items-center cursor-pointer justify-center rounded-md bg-indigo-800 hover:bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300"
+                >
+                  {user?.whishlist?.some(pr => pr == product._id) ? <AiFillHeart size='24' className="h-6  text-red-600 w-6 -mx-2" /> : <AiOutlineHeart size='24' className="h-6 w-6 -mx-2" />}
 
 
+                </div>
               </div>
+
+
             </div>
-
-
           </div>
-        </div>
 
-      </div>)}
+        </div>})}
 
 
       <div className="flex items-center justify-between mt-6">

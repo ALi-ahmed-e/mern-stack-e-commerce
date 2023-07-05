@@ -12,14 +12,14 @@ const hpp = require('hpp')
 require('./utils/passport')
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const authMiddleware = require('./middleware/authMiddleware');
+// const authMiddleware = require('./middleware/authMiddleware');
 // const roleMiddleware = require('./middleware/roleMiddleware');
 const path = require("path")
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
 const dashboardRoute = require('./routes/dashboard');
+const orderRoute = require('./routes/orders');
 const productRoute = require('./routes/products');
-
 
 app.use(session({
   secret: 'secret',
@@ -63,6 +63,8 @@ app.use('/api/auth', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/dashboard', dashboardRoute)
 app.use('/api/product', productRoute)
+app.use('/api/order', orderRoute)
+app.use('/api/payment', require('./routes/payment'))
 
 const _dirname = path.resolve();
 

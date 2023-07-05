@@ -145,6 +145,8 @@ export const changeProductquant = createAsyncThunk('products/changeProductquant'
 
 
 
+
+
 const initstate = {
     products: [],
     product: null,
@@ -157,9 +159,9 @@ const initstate = {
     whishlistProducts: [],
     numberOfAvilableProductsInCart: 0,
     subTotal: 0,
-    searchproducts:[],
-    searchPage:1,
-    searchnumOfPr:0
+    searchproducts: [],
+    searchPage: 1,
+    searchnumOfPr: 0
 }
 
 const DashboardSlice = createSlice({

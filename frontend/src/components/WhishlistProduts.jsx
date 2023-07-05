@@ -6,7 +6,7 @@ import { addProductToWhishlist } from '../store/authSlice'
 
 const WhishlistProduts = () => {
     const { whishlistProducts } = useSelector(s => s.Products)
-    const { user} = useSelector(s => s.Auth)
+    const { user } = useSelector(s => s.Auth)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -21,7 +21,14 @@ const WhishlistProduts = () => {
 
         <div className="rounded-lg md:w-2/3 mx-auto">
 
-            {whishlistProducts?.map(product => <div key={Math.random()} className="justify-between mb-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow-md sm:flex sm:justify-start">
+            {whishlistProducts?.map(product => <div key={Math.random()}  style={{ opacity: product.avilable ? '100%' : '50%' }}className="justify-between relative overflow-hidden mb-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow-md sm:flex sm:justify-start">
+                {!product.avilable && <div className="absolute left-0 top-0 h-16 w-16">
+                    <div
+                        className="absolute  transform -rotate-45  text-red-900 bg-red-300 rounded-md border-red-600 text-center  font-semibold py-1 left-[-34px] top-[32px] w-[170px]">
+                        Not Avilable
+                    </div>
+                </div>
+                }
                 <img
                     src={product.images[0]}
                     alt="product-image"
@@ -48,7 +55,7 @@ const WhishlistProduts = () => {
                         <div className="flex items-center space-x-4">
                             <p className="text-sm text-gray-700 dark:text-gray-50">{product.discountPrice} $</p>
 
-                            <button className=' border-[1px] hover:opacity-75 border-red-500 rounded-md bg-red-300 dark:bg-red-900 p-1' onClick={() => dispatch(addProductToWhishlist({productID:product._id}))}>
+                            <button className=' border-[1px] hover:opacity-75 border-red-500 rounded-md bg-red-300 dark:bg-red-900 p-1' onClick={() => dispatch(addProductToWhishlist({ productID: product._id }))}>
                                 <span className=' sm:block hidden '>Remove</span>
                                 <span className=' sm:hidden '><FaTrash size='20' /></span>
                             </button>

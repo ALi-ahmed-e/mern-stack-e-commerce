@@ -5,11 +5,12 @@ import HomeProducts from '../components/HomeProducts';
 const Home = () => {
   const dispatch = useDispatch()
   const { dbData } = useSelector(s => s.Dashboard)
-  const { user} = useSelector(s => s.Auth)
+  const { user } = useSelector(s => s.Auth)
 
   useEffect(() => {
-    dispatch(getSiteData(user?._id?user?._id:undefined))
-  }, []);
+    dispatch(getSiteData(user?._id ? user?._id : undefined))
+    // console.log(user)
+  }, [user]);
 
   return (
     <div className=' pb-10'>
@@ -22,7 +23,7 @@ const Home = () => {
 
       <div className=' w-full text-center'>
 
-       <HomeProducts />
+        <HomeProducts />
 
 
       </div>

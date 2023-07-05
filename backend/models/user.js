@@ -44,7 +44,16 @@ const UserSchema = new mongoose.Schema({
     city: {
       type: String,
     },
-    address: {
+    apartment: {
+      type: String,
+    },
+    floor: {
+      type: String,
+    },
+    street: {
+      type: String,
+    },
+    building: {
       type: String,
     },
     zipCode: {
@@ -69,11 +78,16 @@ const UserSchema = new mongoose.Schema({
   },
   allowAccessFromMultiplePlaces: {
     type: Boolean,
-    default:false
+    default: false
   },
   cart: {
     type: [CartProduct],
     default: []
+  },
+  orders: {
+    type: [mongoose.Types.ObjectId],
+    default: [],
+    ref:'Order'
   },
   whishlist: {
     type: [mongoose.Types.ObjectId],

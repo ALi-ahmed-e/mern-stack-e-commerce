@@ -83,6 +83,12 @@ const Products = () => {
                                             scope="col"
                                             className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                                         >
+                                            avilable
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                        >
                                             delete
                                         </th>
                                         <th
@@ -148,6 +154,10 @@ const Products = () => {
 
                                         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                                             {product.stock}
+                                        </td>
+                                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                                            {product.avilable.toString()}
+                                            {/* <input type="checkbox" name="avilable" id="" /> */}
                                         </td>
                                         {/* <td className="px-4 py-4 text-sm whitespace-nowrap">
                                             <div className="flex items-center gap-x-2">

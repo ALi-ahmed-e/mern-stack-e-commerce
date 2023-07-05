@@ -1,8 +1,5 @@
 const Product = require("../models/proudct");
-// const CartProductM = require("../models/user");
 const User = require("../models/user");
-// const User = require("../models/user")
-// const Order = require("../models/order");
 const cloudinary = require("../utils/cloudinary");
 const { v4: uuidv4 } = require('uuid');
 
@@ -47,7 +44,7 @@ const createProduct = async (req, res) => {
 
 
 const editProduct = async (req, res) => {
-    const { images, name, description, colors, sizes, tags, originalPrice, discountPrice, stock, category, id } = req.body;
+    const { images, name, description, colors, sizes, tags, originalPrice, discountPrice, stock, category, id, avilable } = req.body;
 
     let imagesLinks = []
 
@@ -71,6 +68,7 @@ const editProduct = async (req, res) => {
             discountPrice,
             stock,
             images: imagesLinks,
+            avilable,
         }
 
         await Product.findByIdAndUpdate(id, productGf)
@@ -295,6 +293,7 @@ const searchProducts = async (req, res) => {
         res.status(400).json(error.message)
     }
 }
+
 
 module.exports = {
     createProduct,

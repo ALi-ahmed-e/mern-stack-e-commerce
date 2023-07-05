@@ -119,6 +119,18 @@ const Header = () => {
                                         </p>
                                     )}
                                 </Menu.Item>
+                                {user?.orders?.length > 0 && <Menu.Item>
+                                    {({ active }) => (
+                                        <p
+                                            onClick={() => navigate('/orders')}
+                                            className={classNames(
+                                                active ? 'bg-gray-100 dark:bg-gray-900 dark:text-slate-100 text-gray-900  cursor-pointer flex justify-between' : 'text-gray-700 dark:text-slate-100 cursor-pointer flex justify-between', 'block px-4 py-2 text-sm  cursor-pointer'
+                                            )}
+                                        >
+                                            orders
+                                        </p>
+                                    )}
+                                </Menu.Item>}
 
                                 {user?.role === 'admin' && <Menu.Item>
                                     {({ active }) => (

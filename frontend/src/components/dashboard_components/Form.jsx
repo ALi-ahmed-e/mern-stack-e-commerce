@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { RadioGroup, Switch } from '@headlessui/react'
 import React, { useEffect, useState } from 'react'
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
@@ -11,9 +11,10 @@ import { useNavigate } from 'react-router-dom';
 const Form = () => {
 
     const { isLoadingPr, product } = useSelector(s => s.Products)
-    const [images, setimages] = useState(product?.images||[])
-    const [colors, setcolors] = useState(product?.colors||[]);
-    const [sizes, setsizes] = useState(product?.sizes||[]);
+    const [images, setimages] = useState(product?.images || [])
+    const [colors, setcolors] = useState(product?.colors || []);
+    const [sizes, setsizes] = useState(product?.sizes || []);
+    const [enabled, setenabled] = useState(product?.avilable || false)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -61,11 +62,12 @@ const Form = () => {
             colors,
             sizes,
             images,
-            category: 'clothes'
+            category: 'clothes',
+            avilable: enabled
         }
-       product?dispatch(editProduct({...data,id:product._id})): dispatch(createProduct(data))
+        product ? dispatch(editProduct({ ...data, id: product._id })) : dispatch(createProduct(data))
 
-       product&&dispatch(setProduct(null))
+        product && dispatch(setProduct(null))
         e.target.name.value = ''
         e.target.description.value = ''
         e.target.originalPrice.value = ''
@@ -107,7 +109,7 @@ const Form = () => {
         <div className=' flex items-center my-10 px-5 justify-center w-full'>
             <div className=' w-full h-[1px] bg-slate-600 ' />
             <div className=' text-3xl font-extrabold min-w-[230px] text-center '>
-                {product?'Edit':'Create'} Product
+                {product ? 'Edit' : 'Create'} Product
             </div>
             <div className=' w-full h-[1px] bg-slate-600 ' />
         </div>
@@ -446,12 +448,27 @@ const Form = () => {
 
 
                 </div>
-
             </div>
+            {
+                product && <div className=' w-full  p-1 flex items-center justify-between'>
+                    Avilable
+                    <Switch
+                        checked={enabled}
+                        onChange={setenabled}
+                        className={`${enabled ? 'bg-teal-500' : 'bg-teal-800'} relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                    >
+                        <span className="sr-only">Use setting</span>
+                        <span
+                            aria-hidden="true"
+                            className={`${enabled ? 'translate-x-9' : 'translate-x-0'} pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        />
+                    </Switch>
+                </div>
+            }
 
             <div className=' w-full text-center mt-6'>
                 <button disabled={isLoadingPr} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm  py-2.5 text-center  max-w-2xl dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-5 w-full">
-                    {isLoadingPr ? <AiOutlineLoading3Quarters size='25' className=' mx-auto animate-spin text-white' /> : product?'Save changes':'Create product'}
+                    {isLoadingPr ? <AiOutlineLoading3Quarters size='25' className=' mx-auto animate-spin text-white' /> : product ? 'Save changes' : 'Create product'}
                 </button>
             </div>
 

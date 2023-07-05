@@ -25,20 +25,23 @@ const Profile = () => {
 
     }
 
-    
+
 
     const saveChanges = async (e) => {
         e.preventDefault()
-        
+
         const data = {
             name: e.target.name.value,
             gender: e.target.gender.value,
             email: e.target.email.value,
             image, phoneNumber: e.target.phoneNumber.value,
-            allowAccessFromMultiplePlaces:enabled,
+            allowAccessFromMultiplePlaces: enabled,
             addresses: {
                 zipCode: e.target.zipCode.value,
-                address: e.target.address.value,
+                apartment: e.target.apartment.value,
+                floor: e.target.floor.value,
+                building: e.target.building.value,
+                street: e.target.street.value,
                 city: e.target.city.value,
                 country: e.target.country.value
             }
@@ -172,47 +175,107 @@ const Profile = () => {
 
 
                     {/* address and zipcode */}
-                    <div className=' flex items-center'>
+                    <div className=' flex items-center justify-around'>
 
                         {/* zip code */}
-                        <div className="mb-6 w-[20%]">
+                        <div className="mb-6  w-1/3">
+                        <label
+                            htmlFor="zipCode"
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                            Zip code
+                        </label>
+                        <input
+                            type="text"
+                            id="zipCode"
+                            name="zipCode"
+                            className="bg-gray-50 outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="  Zip code"
+                            required
+                            defaultValue={user?.addresses?.zipCode}
+                        />
+                        </div>
+
+
+                        {/* <div className=' flex'> */}
+
+                        <div className="mb-6 mx-2 w-1/3">
                             <label
-                                htmlFor="zipCode"
+                                htmlFor="street"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                                Zip code
+                                 street
                             </label>
                             <input
                                 type="text"
-                                id="zipCode"
-                                name="zipCode"
+                                id="street"
+                                name="street"
                                 className="bg-gray-50 outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="  Zip code"
+                                placeholder="street"
                                 required
-                                defaultValue={user?.addresses?.zipCode}
+                                defaultValue={user?.addresses?.street}
                             />
                         </div>
 
-                        {/* address */}
-
-                        <div className="mb-6 w-[80%] mx-2">
+                        <div className="mb-6 mx-2 w-1/3">
                             <label
-                                htmlFor="address"
+                                htmlFor="building"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                                Your address
+                                 building
                             </label>
                             <input
                                 type="text"
-                                id="address"
-                                name="address"
+                                id="building"
+                                name="building"
                                 className="bg-gray-50 outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="address"
+                                placeholder="building"
                                 required
-                                defaultValue={user?.addresses?.address}
+                                defaultValue={user?.addresses?.building}
                             />
                         </div>
 
+                      
+
+                        {/* </div> */}
+
+                    </div>
+                    <div className=' w-full flex items-center justify-around'>
+                    <div className="mb-6 mx-2 w-1/2">
+                            <label
+                                htmlFor="floor"
+                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                                 floor
+                            </label>
+                            <input
+                                type="text"
+                                id="floor"
+                                name="floor"
+                                className="bg-gray-50 outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="floor"
+                                required
+                                defaultValue={user?.addresses?.floor}
+                            />
+                        </div>
+
+                        <div className="mb-6 mx-2 w-1/2">
+                            <label
+                                htmlFor="apartment"
+                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                                 apartment
+                            </label>
+                            <input
+                                type="text"
+                                id="apartment"
+                                name="apartment"
+                                className="bg-gray-50 outline-none border-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="apartment"
+                                required
+                                defaultValue={user?.addresses?.apartment}
+                            />
+                        </div>
                     </div>
 
 
@@ -272,7 +335,7 @@ const Profile = () => {
                     <Switch
                         checked={enabled}
                         onChange={setenabled}
-                        className={`${enabled ? 'bg-teal-900' : 'bg-teal-700'} relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                        className={`${enabled ? 'bg-teal-500' : 'bg-teal-800'} relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                     >
                         <span className="sr-only">Use setting</span>
                         <span
