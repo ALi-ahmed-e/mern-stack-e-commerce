@@ -1,8 +1,9 @@
 landing page //
 cart sys //
 whishlist sys //
-orders sys
+orders sys//
 search sys //
 notifications sys
 cart sys enhance
 whishlist enhance
+users search and admins manage

@@ -38,11 +38,6 @@ const Charts = () => {
         user&& dispatch(getDashboardData())
     },[]);
 
-    const monthName = (monthNumber) => {
-        return new Date(2000, monthNumber-1).toLocaleString('default', { month: 'long' })
-    }
-
-
     const data = {
         labels: ['Google', 'email and password'],
         datasets: [
@@ -71,9 +66,9 @@ const Charts = () => {
 
 
     useEffect(() => {
+        datas?.numberOfOrdersLast30Days && setorders(datas.numberOfOrdersLast30Days)
         datas?.numberOfUsersLast30Days && setusers(datas.numberOfUsersLast30Days)
-        datas?.numberOfOrdersLast7Days && setorders(datas.numberOfOrdersLast7Days)
-    }, [datas]);
+        }, [datas]);
 
 
 
@@ -84,15 +79,12 @@ const Charts = () => {
             legend: {
                 position: 'top',
             },
-            // title: {
-            //     display: true,
-            //     text: 'Chart.js Line Chart',
-            // },
         },
     };
 
     const data2 = {
-        labels: users?.map(d => d.date.slice(8, 10) + ' ' + monthName(d.date.slice(5, 7))),
+        labels: users?.map(d => d.date.slice(8, 10) + ' ' +  new Date(2000, parseInt(d.date.slice(5, 7))).toLocaleString('default', { month: 'long' })),
+        // labels: users?.map(d => d.date.slice(8, 10) + ' ' + monthName(d.date.slice(5, 7))),
         datasets: [
             {
                 fill: true,

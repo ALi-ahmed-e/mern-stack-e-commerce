@@ -34,6 +34,18 @@ const dashboardData = async (req, res) => {
 
         }
 
+        
+        
+        dates.forEach(async ({ startOfDay, endOfDay, date }) => {
+            const count2 = await Order.countDocuments({ createdAt: { $gte: startOfDay, $lt: endOfDay } });
+
+            
+            OrdersLast30Days.push({
+                date: date,
+                number: count2
+            });
+        });
+
         dates.forEach(async ({ startOfDay, endOfDay, date }) => {
 
             const count = await User.countDocuments({ createdAt: { $gte: startOfDay, $lt: endOfDay } });
@@ -44,18 +56,6 @@ const dashboardData = async (req, res) => {
                 number: count
             });
         });
-
-
-        dates.forEach(async ({ startOfDay, endOfDay, date }) => {
-            const count2 = await Order.countDocuments({ createdAt: { $gte: startOfDay, $lt: endOfDay } });
-
-
-            OrdersLast30Days.push({
-                date: date,
-                number: count2
-            });
-        });
-
         // console.log('s1')
 
         const [numberOfUsers, numberOfOrders, usersWithGoogle] = await Promise.all([

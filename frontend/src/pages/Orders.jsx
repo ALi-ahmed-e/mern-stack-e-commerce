@@ -9,7 +9,6 @@ const Orders = () => {
     const getOr = async () => {
         try {
             const res = await axios.get('/api/order/getUserOrders', { withCredentials: true })
-            console.log(res.data)
             setorders(res.data)
         } catch (error) {
             console.log(error)
@@ -63,7 +62,7 @@ const Orders = () => {
                 </div>
                 <div className="text-xs">
                     {/* <div className="mb-1">Discount：￥50</div> */}
-                    <div className="mb-24">Remark：--</div>
+                    <div className="mb-24"></div>
                     <div className="text-right">
                         <div>Time：{formatDate(order.createdAt)}</div>
                         <div className="font-bold text-sm">Total：{order.totalPrice} EGP</div>

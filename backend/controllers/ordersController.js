@@ -4,57 +4,57 @@ const DashBoardData = require("../models/dashboardData");
 const sendEMail = require('../utils/nodeMailer');
 
 const createOrder = async (req, res) => {
-    const user = req.user
-    try {
-        const address = user.addresses;
-        if (
-            !address.country ||
-            !address.city ||
-            !address.apartment ||
-            !address.floor ||
-            !address.street ||
-            !address.building ||
-            !address.zipCode
-        ) return res.status(400).json('address is required')
+  const user = req.user
+  try {
+    const address = user.addresses;
+    if (
+      !address.country ||
+      !address.city ||
+      !address.apartment ||
+      !address.floor ||
+      !address.street ||
+      !address.building ||
+      !address.zipCode
+    ) return res.status(400).json('address is required')
 
 
-        const { deliverycoast } = await DashBoardData.findById(process.env.ADMIN_DB_DOC_ID, 'deliverycoast')
+    const { deliverycoast } = await DashBoardData.findById(process.env.ADMIN_DB_DOC_ID, 'deliverycoast')
 
-        const { cart } = await User.findById(req.user._id, 'cart -_id').populate('cart.product')
-        let subTotal = 0
-        let products = []
+    const { cart } = await User.findById(req.user._id, 'cart -_id').populate('cart.product')
+    let subTotal = 0
+    let products = []
 
-        cart.map(({ product, quant, color, size }) => {
-            if (product.avilable) {
-                const newproduct = {
-                    name: product.name,
-                    description: product.description,
-                    id: product._id,
-                    size,
-                    quant,
-                    color,
-                    price:product.discountPrice
+    cart.map(({ product, quant, color, size }) => {
+      if (product.avilable) {
+        const newproduct = {
+          name: product.name,
+          description: product.description,
+          id: product._id,
+          size,
+          quant,
+          color,
+          price: product.discountPrice
 
-                }
-                products.push(newproduct)
-                subTotal += (parseInt(product.discountPrice) * parseInt(quant))
-            }
-        })
+        }
+        products.push(newproduct)
+        subTotal += (parseInt(product.discountPrice) * parseInt(quant))
+      }
+    })
 
 
-        const order = await Order.create({
-            shippingAddress: user.addresses,
-            user: user._id,
-            totalPrice: parseInt(deliverycoast) + parseInt(subTotal),
-            products: products
-        })
+    const order = await Order.create({
+      shippingAddress: user.addresses,
+      user: user._id,
+      totalPrice: parseInt(deliverycoast) + parseInt(subTotal),
+      products: products
+    })
 
-        await User.findByIdAndUpdate(user._id, {
-            $push: { orders: order._id },
-            cart: []
-        })
+    await User.findByIdAndUpdate(user._id, {
+      $push: { orders: order._id },
+      cart: []
+    })
 
-        const htmlTemplate = `
+    const htmlTemplate = `
         <html>
         <head>
           <meta charset="UTF-8">
@@ -121,7 +121,7 @@ const createOrder = async (req, res) => {
               <th>products:</th>
               <td>
             ${order.products.map(({ name, description, quant, size, color }) => {
-            return `      <div>
+      return `      <div>
                       <p>name: ${name}</p>
                       <p>description: ${description}</p>
                       <p>quantity: ${quant}</p>
@@ -165,24 +165,104 @@ const createOrder = async (req, res) => {
 
         `
 
-        await sendEMail(process.env.APP_EMAIL_ADDRESS, `New Order Created by ${user.name}`, htmlTemplate)
+    await sendEMail(process.env.APP_EMAIL_ADDRESS, `New Order Created by ${user.name}`, htmlTemplate)
 
-        res.status(200).json({ orderId: order._id })
+    res.status(200).json({ orderId: order._id })
 
 
-    } catch (error) {
-        res.status(400).json(error.message)
-    }
+  } catch (error) {
+    res.status(400).json(error.message)
+  }
 
 }
 
 const getUserOrders = async (req, res) => {
-const {orders} = await User.findById(req.user._id,'orders').populate('orders')
-res.status(200).json(orders)
+  try {
+
+    const { orders } = await User.findById(req.user._id, 'orders').populate('orders')
+
+    res.status(200).json(orders)
+
+  } catch (error) {
+    res.status(400).json(error.message)
+
+  }
+
+}
+
+const getallOrders = async (req, res) => {
+  const { page, limit } = req.query
+
+  const skip = (page - 1) * limit
+  try {
+    const orders = await Order.find().skip(skip).limit(limit).populate('user', 'name')
+
+
+    const number_of_orders = await Order.find().countDocuments()
+
+
+    res.status(200).json({ orders, number_of_orders, page })
+
+
+  } catch (error) {
+    res.status(400).json(error.message)
+
+  }
+}
+
+const getOneOrder = async (req, res) => {
+  const { id } = req.params;
+  try {
+
+    const order = await Order.findById(id,).populate('user', 'name image role phoneNumber').populate('products.id', 'images ')
+
+    res.status(200).json(order)
+
+  } catch (error) {
+    res.status(400).json(error.message)
+
+  }
+
+}
+
+
+const changeOrderStatus = async (req, res) => {
+  const { id, status } = req.body;
+  try {
+
+    const changePaymentStatus = (status) => {
+      if (status === 'Accepted'||status === 'Processing') {
+        return 'pending'
+      } else if (status === 'Delivered') {
+        return 'payed'
+      } else if (status === 'Declined') {
+        return 'declined'
+      }
+    }
+
+    await Order.findByIdAndUpdate(id, {
+      status,
+      paymentInfo: {
+        status:changePaymentStatus(status)
+      }
+    })
+
+
+    const order = await Order.findById(id,).populate('user', 'name image role phoneNumber').populate('products.id', 'images ')
+
+    res.status(200).json(order)
+
+  } catch (error) {
+    res.status(400).json(error.message)
+
+  }
 
 }
 
 module.exports = {
-    createOrder,
-    getUserOrders,
+  createOrder,
+  getUserOrders,
+  getallOrders,
+  getOneOrder,
+  changeOrderStatus,
 }
