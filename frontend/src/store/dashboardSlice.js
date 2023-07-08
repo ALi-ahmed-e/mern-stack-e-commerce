@@ -48,6 +48,37 @@ export const getDashboardData = createAsyncThunk('dashboard/getDashboardData', a
 
 
 
+export const getAdmins = createAsyncThunk('dashboard/getAdmins', async (_, { rejectWithValue, getState }) => {
+
+    try {
+        //get Dashboard Data
+        const res = await axios.get('/api/dashboard/getAdmins', { withCredentials: true })
+
+        return res.data
+
+    } catch (error) {
+        return rejectWithValue(error.response.data.message)
+    }
+
+})
+
+
+export const changeAdmins = createAsyncThunk('dashboard/changeAdmins', async (data, { rejectWithValue, getState }) => {
+
+    try {
+        //change admins
+        const res = await axios.put('/api/dashboard/changeAdmins',data, { withCredentials: true })
+
+        return res.data
+
+    } catch (error) {
+        return rejectWithValue(error.response.data.message)
+    }
+
+})
+
+
+
 export const createProduct = createAsyncThunk('products/createProduct', async (data, { rejectWithValue, getState }) => {
 
     try {
@@ -116,7 +147,8 @@ const initstate = {
     page: 1,
     number_of_products: 0,
     products: [],
-    dbData:null
+    dbData:null,
+    admins:[]
 }
 
 const DashboardSlice = createSlice({
@@ -140,6 +172,36 @@ const DashboardSlice = createSlice({
 
         })
         builder.addCase(getDashboardData.rejected, (state, action) => {
+
+            state.isLoading = false
+        })
+        //change admins
+        builder.addCase(changeAdmins.pending, (state, action) => {
+
+            state.isLoading = true
+        })
+        builder.addCase(changeAdmins.fulfilled, (state, action) => {
+            state.isLoading = false
+
+            state.admins = action.payload
+
+        })
+        builder.addCase(changeAdmins.rejected, (state, action) => {
+
+            state.isLoading = false
+        })
+        //get admins
+        builder.addCase(getAdmins.pending, (state, action) => {
+
+            state.isLoading = true
+        })
+        builder.addCase(getAdmins.fulfilled, (state, action) => {
+            state.isLoading = false
+
+            state.admins = action.payload
+
+        })
+        builder.addCase(getAdmins.rejected, (state, action) => {
 
             state.isLoading = false
         })

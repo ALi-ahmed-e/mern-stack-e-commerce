@@ -3,7 +3,6 @@ cart sys //
 whishlist sys //
 orders sys//
 search sys //
-notifications sys
-cart sys enhance
-whishlist enhance
-users search and admins manage
+cart sys enhance //
+whishlist enhance //
+admins manage //

@@ -64,7 +64,10 @@ const Header = () => {
             {user && <div className=' flex items-center mx-2 '>
 
                 {/* <BsBell size={24} className=' mx-3 cursor-pointer' /> */}
-                <BsCart2 onClick={() => navigate('/cart')} size={24} className=' mx-3 cursor-pointer' />
+                <div className='flex items-center justify-center'>
+                    <BsCart2 onClick={() => navigate('/cart')} size={24} className=' mx-3 cursor-pointer' />
+                    <span className='flex items-center justify-center w-fit px-1  h-4  mb-3 ml-6 text-xs rounded-full bg-red-600 text-white absolute'>{user?.cart.length}</span>
+                </div>
 
 
 

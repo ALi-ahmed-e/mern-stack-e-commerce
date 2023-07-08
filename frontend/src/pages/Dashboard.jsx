@@ -1,8 +1,4 @@
 import React from 'react'
-// import Charts from '../components/dashboard_components/Charts'
-// import InfoCards from '../components/dashboard_components/InfoCards'
-// import Form from '../components/dashboard_components/Form'
-// import Products from '../components/dashboard_components/Products'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -28,7 +24,7 @@ const Dashboard = () => {
                         <NavLink  to='statistics'className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"> statistics</NavLink>
                     </li>
                     <li>
-                        <NavLink  to='Modify-shop'  className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">  Modify the shop</NavLink>
+                        <NavLink  to='Modify-shop'  className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">  Modify shop</NavLink>
                     </li>
                     <li>
                         <NavLink to='create-product' className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Create product</NavLink>

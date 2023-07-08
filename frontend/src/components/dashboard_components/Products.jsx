@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {  setProduct } from '../../store/productsSlice'
-import { DeleteProduct} from '../../store/dashboardSlice'
+import { setProduct } from '../../store/productsSlice'
+import { DeleteProduct } from '../../store/dashboardSlice'
 import { useNavigate } from 'react-router-dom'
 import { getProducts } from '../../store/dashboardSlice'
 const Products = () => {
@@ -121,14 +121,14 @@ const Products = () => {
                                                         className="object-cover w-10 h-10 rounded-full"
                                                         src={product.images[0]}
                                                         alt=""
-                                                        crossOrigin="anonymous" 
+                                                        crossOrigin="anonymous"
                                                     />
 
                                                 </div>
                                             </div>
                                         </td>
 
-                                        <td className=" py-4 text-sm font-medium text-gray-700 whitespace-nowrap" onClick={()=>navigate(`/product/${product._id}`)}>
+                                        <td className=" py-4 text-sm font-medium text-gray-700 whitespace-nowrap" onClick={() => navigate(`/product/${product._id}`)}>
                                             <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 ">
                                                 <h2 className="text-sm hover:underline cursor-pointer hover:opacity-70 font-normal text-gray-500 dark:text-gray-300 ">
                                                     {product.name}
@@ -150,7 +150,6 @@ const Products = () => {
                                         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                                             {product.discountPrice} LE
                                         </td>
-
 
                                         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                                             {product.stock}
@@ -240,7 +239,7 @@ const Products = () => {
             </div>
 
             <div className="flex items-center justify-between mt-6">
-            {new Array(number_of_products && Math.ceil(number_of_products / 10)).fill('') > 1 &&         <div
+                {new Array(number_of_products && Math.ceil(number_of_products / 10)).fill('') > 1 && <div
                     onClick={() => dispatch(getProducts({ page: page - 1 }))}
                     className="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-slate-700"
                 >
@@ -295,7 +294,7 @@ const Products = () => {
                             />
                         </svg>
                     </div>
-                    }
+                }
             </div>
         </section>
 

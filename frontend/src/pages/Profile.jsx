@@ -54,20 +54,15 @@ const Profile = () => {
         <form onSubmit={saveChanges} className=' pb-10'>
 
 
-            {/* <div className=' flex items-center my-10 px-5 justify-center w-full'>
-                <div className=' w-full h-[1px] bg-slate-600 ' />
-                <div className=' text-3xl font-extrabold min-w-[230px] text-center '>
-                    Personal informaion
-                </div>
-                <div className=' w-full h-[1px] bg-slate-600 ' />
-            </div> */}
+            
 
 
 
-            <div className=' w-[99%]  sm:flex-row-reverse  mx-auto p-3 flex-col flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
+            <div className=' w-[99%]  sm:flex-row-reverse relative  mx-auto p-3 pt-5 flex-col flex items-center justify-between rounded-md bg-white dark:bg-slate-800 my-2 '>
                 <div className=' mb-3'>
                     {user?.role == 'admin' ? <div className=' text-xl flex items-center'>admin<MdAdminPanelSettings className=' mx-2' size={50} /></div> : <div className=' text-xl flex items-center'>user<MdAccountCircle className=' mx-2' size={50} /></div>}
                 </div>
+                <div className='top-1 right-1 absolute'>id: {user?._id}</div>
 
                 <div className=' flex sm:flex-row flex-col items-center'>
                     <div className=' relative '>
@@ -81,6 +76,7 @@ const Profile = () => {
                         type="text" className=' text-xl font-semibold border-b-2 my-5 mx-2 border-none  rounded-md bg-transparent  p-1  outline-none' defaultValue={user?.name} />
 
                 </div>
+                
 
             </div>
 

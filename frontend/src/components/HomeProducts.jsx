@@ -27,8 +27,8 @@ const HomeProducts = () => {
   return (
     <div>
 
-      {products?.map(product =>
-        { return product.avilable &&<div key={Math.random()} className=' inline-block  w-full  max-w-[400px] '>
+      {products?.map(product => {
+        return product.avilable && <div key={Math.random()} className=' inline-block  w-full  max-w-[400px] '>
           <div className="relative m-1 flex w-full scale-[85%] max-w-[340px] mx-auto flex-col overflow-hidden rounded-lg border dark:border-slate-700 border-gray-100 dark:bg-slate-800 dark:text-white bg-white shadow-md">
             <div
               className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl cursor-pointer"
@@ -49,7 +49,7 @@ const HomeProducts = () => {
               <div className="mt-2 mb-5 flex items-center justify-between dark:text-white text-slate-900">
                 <p>
                   <span className="text-3xl font-bold ">${product.discountPrice}</span>
-                  <span className="text-sm  line-through">${product.originalPrice}</span>
+                  {product.discountPrice != product.originalPrice && <span className="text-sm  line-through">${product.originalPrice}</span>}
                 </p>
               </div>
 
@@ -79,7 +79,8 @@ const HomeProducts = () => {
             </div>
           </div>
 
-        </div>})}
+        </div>
+      })}
 
 
       <div className="flex items-center justify-between mt-6">

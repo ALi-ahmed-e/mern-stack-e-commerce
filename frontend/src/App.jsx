@@ -24,7 +24,6 @@ import Successful from './pages/Successful'
 import Orders from './pages/Orders'
 import DashOrders from './components/dashboard_components/DashOrders'
 import ShowOrder from './pages/ShowOrder'
-import Users from './components/dashboard_components/Users'
 
 
 
@@ -105,8 +104,6 @@ function App() {
               <Route path='Modify-shop' element={<ModifyShop />} />
 
               <Route path='all-orders' element={<DashOrders />} />
-
-              <Route path='manage-users' element={<Users />} />
 
             </Route>
 

@@ -34,12 +34,12 @@ const dashboardData = async (req, res) => {
 
         }
 
-        
-        
+
+
         dates.forEach(async ({ startOfDay, endOfDay, date }) => {
             const count2 = await Order.countDocuments({ createdAt: { $gte: startOfDay, $lt: endOfDay } });
 
-            
+
             OrdersLast30Days.push({
                 date: date,
                 number: count2
@@ -247,8 +247,57 @@ const getSiteData = async (req, res) => {
     }
 }
 
+const getAdmins = async (req, res) => {
+    try {
+        const { admins } = await DashBoardData.findById(process.env.ADMIN_DB_DOC_ID, 'admins').populate('admins', '-password -cart -whishlist -verified -provider -updatedAt -createdAt -orders -allowAccessFromMultiplePlaces -__v')
+
+        return res.status(200).json(admins)
+
+
+
+
+    } catch (error) {
+        console.log(error.message)
+        return res.status(400).json(error.message)
+    }
+}
+
+const changeAdmins = async (req, res) => {
+    const { id, action } = req.body
+    try {
+        if (action === 'remove') {
+
+            await DashBoardData.findByIdAndUpdate(process.env.ADMIN_DB_DOC_ID, {
+                $pull: { admins: id }
+            })
+            await User.findByIdAndUpdate(id, {
+                role: 'user'
+            })
+
+        } else {
+
+            await DashBoardData.findByIdAndUpdate(process.env.ADMIN_DB_DOC_ID, {
+                $push: { admins: id }
+            })
+            await User.findByIdAndUpdate(id, {
+                role: 'admin'
+            })
+
+        }
+
+        const { admins } = await DashBoardData.findById(process.env.ADMIN_DB_DOC_ID, 'admins').populate('admins', '-password -cart -whishlist -verified -provider -updatedAt -createdAt -orders -allowAccessFromMultiplePlaces -__v')
+
+        return res.status(200).json(admins)
+
+    } catch (error) {
+        console.log(error.message)
+        return res.status(400).json(error.message)
+    }
+}
 module.exports = {
     dashboardData,
     editSite,
     getSiteData,
+    getAdmins,
+    changeAdmins,
 }

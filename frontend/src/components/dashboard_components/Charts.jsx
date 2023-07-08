@@ -35,8 +35,8 @@ const Charts = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        user&& dispatch(getDashboardData())
-    },[]);
+        user && dispatch(getDashboardData())
+    },[user]);
 
     const data = {
         labels: ['Google', 'email and password'],
