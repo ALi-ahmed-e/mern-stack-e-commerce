@@ -195,7 +195,7 @@ const getallOrders = async (req, res) => {
 
   const skip = (page - 1) * limit
   try {
-    const orders = await Order.find().skip(skip).limit(limit).populate('user', 'name')
+    const orders = await Order.find().sort({ createdAt: 'desc' }).skip(skip).limit(limit).populate('user', 'name')
 
 
     const number_of_orders = await Order.find().countDocuments()

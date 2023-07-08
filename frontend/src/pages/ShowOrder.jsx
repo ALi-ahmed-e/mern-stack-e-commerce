@@ -1,18 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { changeOrderStatus, getOneOrder } from '../store/ordersSlice'
 import { MdAdminPanelSettings, MdAccountCircle } from 'react-icons/md'
+import { useState } from 'react'
 
 const ShowOrder = () => {
     const { order } = useSelector(s => s.Orders)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { id } = useParams()
-
+    const status = useRef()
     useEffect(() => {
         dispatch(getOneOrder(id))
     }, []);
+    
+    useEffect(() => {
+        status.current.value = order.status
+    }, [order.status]);
+    
 
     return (<>
             <div className=" y-2 border-b border-gray-300 text-center text-xl font-semibold py-1">Order Info:</div>
@@ -43,7 +49,7 @@ const ShowOrder = () => {
                 <tr>
                     <th className="text-left py-2 border-b border-gray-300 dark:bg-slate-800 bg-slate-300  pl-5">Status:</th>
                     <td className="text-left py-2 border-b pl-5 border-gray-300">
-                        <select   defaultValue={order.status} onChange={(e)=>dispatch(changeOrderStatus({id:order._id,status:e.target.value}))} className=' dark:bg-slate-400 p-1 rounded-md cursor-pointer dark:text-slate-700'>
+                        <select   ref={status}  onChange={(e)=>dispatch(changeOrderStatus({id:order._id,status:e.target.value}))} className=' dark:bg-slate-400 p-1 rounded-md cursor-pointer dark:text-slate-700'>
                             <option value="Processing">Processing</option>
                             <option value="Declined">Declined</option>
                             <option value="Accepted">Accepted</option>
