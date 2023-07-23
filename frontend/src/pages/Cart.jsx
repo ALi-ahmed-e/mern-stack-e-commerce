@@ -14,6 +14,8 @@ const Cart = () => {
   const [createingOrder, setcreateingOrder] = useState(false)
   const [err, seterr] = useState(false)
   const { user } = useSelector(s => s.Auth)
+  const [paymode, setpaymode] = useState()
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,27 +31,27 @@ const Cart = () => {
         !address.building ||
         !address.zipCode
       ) { seterr('address is required, please add your address to your account') } else {
+        if (paymode == 'ondoor') {
 
+          //create Order
+          setcreateingOrder(true)
+          const res = await axios.post("/api/order/createOrder", {}, { withCredentials: true })
+          setcreateingOrder(false)
+          navigate('/order-creted-successfuly/' + res.data.orderId)
+        } else if (paymode == 'online') {
+          setcreateingOrder(true)
 
-        //create Order
-        setcreateingOrder(true)
-        const res = await axios.post("/api/order/createOrder", {}, { withCredentials: true })
-        setcreateingOrder(false)
-        navigate('/order-creted-successfuly/' + res.data.orderId)
+          const res = await axios.post('/api/payment/create-payment', { amount: parseInt(deliverycoast) + parseInt(subTotal) });
 
+          window.location.href = `https://accept.paymob.com/api/acceptance/iframes/767858?payment_token=${res.data.token}`;
+
+        }
       }
+
     } catch (error) {
       return console.log(error.message)
     }
 
-    // dispatch(createOrder())
-    // // try {
-    //   const res = await axios.post('/api/payment/create-payment',{amount:parseInt(deliverycoast) + parseInt(subTotal)});
-
-    //   window.location.href = `https://accept.paymob.com/api/acceptance/iframes/767859?payment_token=${res.data.token}`;
-    // } catch (error) {
-    //   console.error(error);
-    // }
   };
 
   const getCart = () => {
@@ -159,8 +161,23 @@ const Cart = () => {
                 {/* <p className="text-sm text-gray-700 dark:text-gray-200">including VAT</p> */}
               </div>
             </div>
-            <div id='paypal-button'>
-              <button onClick={handleSubmit} disabled={numberOfAvilableProductsInCart <= 0} className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+            <hr className="my-2" />
+            
+            <div>
+              <div className=' flex w-full justify-around items-center'>
+                <span className=' flex items-center justify-around'>
+                  {'Online '}
+                  <input className=' mx-2 scale-125' type="radio" name="pmode" onChange={() => setpaymode('online')} />
+                </span>
+
+                <div className=' h-full w-[2px] bg-slate-950 text-slate-600/0'>|</div>
+
+                <span className=' flex items-center justify-around '>
+                  {'Ondoor '}
+                  <input className=' mx-2 scale-125' type="radio" name="pmode" onChange={() => setpaymode('ondoor')} />
+                </span>
+              </div>
+              <button onClick={handleSubmit} disabled={numberOfAvilableProductsInCart <= 0} style={{opacity:paymode?'100%':'30%',cursor:paymode?'pointer':'not-allowed'}} className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
                 {createingOrder ? 'please wait...' : 'Check out'}
               </button>
               <p className=' text-red-600'>{err}</p>

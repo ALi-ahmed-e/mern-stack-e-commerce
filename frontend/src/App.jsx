@@ -123,7 +123,7 @@ function App() {
 
             <Route path='/cart' element={<CheckAuth><Cart /></CheckAuth>} />
             
-            <Route path='/order-creted-successfuly/:orderId' element={<CheckAuth><Successful /></CheckAuth>} />
+            <Route path='/order-creted-successfuly/:orderId' element={<Successful />} />
             
             <Route path='/orders' element={<CheckAuth><Orders /></CheckAuth>} />
 

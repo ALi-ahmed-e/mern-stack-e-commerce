@@ -14,14 +14,16 @@ const ShowOrder = () => {
     useEffect(() => {
         dispatch(getOneOrder(id))
     }, []);
-    
+
     useEffect(() => {
-        status.current.value = order.status
-    }, [order.status]);
-    
+        if (order?.status) {
+            status.current.value = order.status
+        }
+    }, [order?.status]);
+
 
     return (<>
-            <div className=" y-2 border-b border-gray-300 text-center text-xl font-semibold py-1">Order Info:</div>
+        <div className=" y-2 border-b border-gray-300 text-center text-xl font-semibold py-1">Order Info:</div>
         {order && <div className="font-sans overflow-auto text-base text-gray-700 dark:text-slate-100  dark:bg-slate-700 leading-6 flex flex-col w-[95%] mx-auto my-10  rounded-md">
             <table className="border-collapse w-full">
                 <tr>
@@ -49,7 +51,7 @@ const ShowOrder = () => {
                 <tr>
                     <th className="text-left py-2 border-b border-gray-300 dark:bg-slate-800 bg-slate-300  pl-5">Status:</th>
                     <td className="text-left py-2 border-b pl-5 border-gray-300">
-                        <select   ref={status}  onChange={(e)=>dispatch(changeOrderStatus({id:order._id,status:e.target.value}))} className=' dark:bg-slate-400 p-1 rounded-md cursor-pointer dark:text-slate-700'>
+                        <select ref={status} onChange={(e) => dispatch(changeOrderStatus({ id: order._id, status: e.target.value }))} className=' dark:bg-slate-400 p-1 rounded-md cursor-pointer dark:text-slate-700'>
                             <option value="Processing">Processing</option>
                             <option value="Declined">Declined</option>
                             <option value="Accepted">Accepted</option>

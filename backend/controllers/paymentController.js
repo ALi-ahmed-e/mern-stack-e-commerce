@@ -1,44 +1,11 @@
 const axios = require('axios');
+const crypto = require('crypto');
+const { createOrderFunction } = require('./ordersController');
+const Order = require('../models/order');
 
-const API_KEY = 'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T0RJM01ERTVMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkudEtjVkNzc2RwUFNoUjZPM2tIdnZLQVdqSXJlUFZUa19CLVczVm82RkhKR19CN253dWRUZ3pLOHc5TGJVRVFPdFpual9tcl9iTVlHZFpObks3RkRwR1E=';
-const INTEGRATION_ID = 3932861;
+const API_KEY = process.env.PB_API_KEY;
+const INTEGRATION_ID = process.env.PB_INTEGRATION_ID;
 
-
-
-// const createPayment = async (req, res) => {
-
-//     try {
-//         const payload = {
-//             "amount_cents": req.body.amount, // The payment amount in cents
-//             "currency": "EGP",
-//             "merchant_order_id": req.user.email, // Your unique order ID
-//             "integration_id": INTEGRATION_ID,
-//             "billing_data": {
-//                 "email": req.user.email // The customer email
-//             }
-//         };
-
-//         const resp = await axios.post('https://accept.paymob.com/api/acceptance/payments', payload, {
-//             // const { data: { id, payment_token } } = await axios.post('https://accept.paymobsolutions.com/api/acceptance/post_pay', payload, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Authorization': `Bearer ${API_KEY}`
-//             }
-//         });
-//         console.log(resp)
-
-//         // res.json({ id, payment_token });
-//         res.json(resp.data);
-//     } catch (error) {
-//         console.error(error.message);
-//         res.status(500).json({ message: 'An error occurred while creating the payment.' });
-//     }
-
-// }
-
-
-
-// const createPaymentRequest = async (amount, callbackUrl, description, email, name) => {
 const createPayment = async (req, res) => {
     const { amount } = req.body
     const { user } = req
@@ -80,6 +47,7 @@ const createPayment = async (req, res) => {
                 "currency": "EGP",
                 "integration_id": INTEGRATION_ID
             })
+        await createOrderFunction(user, { orderId: orderReg.data.id })
         return res.json(paymentKeyReq.data);
 
     } catch (error) {
@@ -88,6 +56,51 @@ const createPayment = async (req, res) => {
     }
 };
 
+const processedcallback = async (req, res) => {
+    const respo = req.body
+
+
+
+
+    const { id } = respo.obj
+    const order_id = respo.obj.order.id
+
+    const { secure_hash } = respo.obj.data
+
+    const { success, is_voided, owner, pending, is_standalone_payment, is_refunded, is_capture, is_auth, amount_cents, has_parent_transaction, created_at, currency, error_occured, integration_id, is_3d_secure } = respo
+    const { pan, sub_type, type } = respo.obj.source_data
+    const str = amount_cents + created_at + currency + error_occured + has_parent_transaction + id + integration_id + is_3d_secure + is_auth + is_capture + is_refunded + is_standalone_payment + is_voided + order_id + owner + pending + pan + sub_type + type + success
+
+    const secret = process.env.PB_SECRET;
+    const hasedStr = crypto.createHmac('SHA512', secret).update(str).digest('hex');
+
+
+    if (secure_hash === hasedStr) {
+
+        const order = await Order.findOne({ orderId: order_id })
+        if (success) {
+            await Order.findByIdAndUpdate(order._id, {
+                paymentInfo: {
+                    status: 'paid'
+                }
+            })
+        } else {
+            await Order.findByIdAndUpdate(order._id, {
+                paymentInfo: {
+                    status: 'declined'
+                }
+            })
+        }
+
+        return res.status(200)
+
+    } else {
+        return res.status(400)
+
+    }
+}
+
+
 
 
 
@@ -95,5 +108,5 @@ const createPayment = async (req, res) => {
 
 module.exports = {
     createPayment,
-
+    processedcallback
 };

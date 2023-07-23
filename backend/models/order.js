@@ -9,6 +9,7 @@ const orderProductSchema = new mongoose.Schema({
     size: String,
     description:String,
     quant:Number,
+    price:Number,
     id: {
         type: mongoose.Types.ObjectId,
         ref: 'Proudct'
@@ -16,6 +17,9 @@ const orderProductSchema = new mongoose.Schema({
 })
 
 const orderSchema = new mongoose.Schema({
+    orderId:{
+        type: String,    
+    },
     shippingAddress: {
         type: Object,
         required: true,
@@ -46,6 +50,9 @@ const orderSchema = new mongoose.Schema({
             type: String,
             default: 'on door'
         },
+        info:{
+            type:Object
+        }
     },
     paidAt: {
         type: String,
