@@ -4,6 +4,7 @@
 
 .cd{
     @apply border-slate-300 rounded-lg  border-[1px] shadow-md dark:border-slate-800 hover:shadow-lg transition-all bg-white dark:bg-slate-800
+;
 }
 
 .active{
