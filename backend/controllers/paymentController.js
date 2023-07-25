@@ -61,40 +61,56 @@ const processedcallback = async (req, res) => {
 
 
 
-
     const { id } = respo.obj
     const order_id = respo.obj.order.id
 
     const { secure_hash } = respo.obj.data
 
-    const { success, is_voided, owner, pending, is_standalone_payment, is_refunded, is_capture, is_auth, amount_cents, has_parent_transaction, created_at, currency, error_occured, integration_id, is_3d_secure } = respo
+    const { success, is_voided, owner, pending, is_standalone_payment, is_refunded, is_capture, is_auth, amount_cents, has_parent_transaction, created_at, currency, error_occured, integration_id, is_3d_secure } = respo.obj
     const { pan, sub_type, type } = respo.obj.source_data
     const str = amount_cents + created_at + currency + error_occured + has_parent_transaction + id + integration_id + is_3d_secure + is_auth + is_capture + is_refunded + is_standalone_payment + is_voided + order_id + owner + pending + pan + sub_type + type + success
+    // const str = amount_cents?.toString() + created_at?.toString() + currency?.toString() + error_occured?.toString() + has_parent_transaction?.toString() + id?.toString() + integration_id?.toString() + is_3d_secure?.toString() + is_auth?.toString() + is_capture?.toString() + is_refunded?.toString() + is_standalone_payment?.toString() + is_voided?.toString() + order_id?.toString() + owner?.toString() + pending?.toString() + pan?.toString() + sub_type?.toString() + type?.toString() + success?.toString()
+    const hasedStr = crypto.createHmac('SHA512', process.env.PB_SECRET).update(str).digest('hex')
 
-    const secret = process.env.PB_SECRET;
-    const hasedStr = crypto.createHmac('SHA512', secret).update(str).digest('hex');
+    // console.log('respo')
+    // console.log(respo)
 
+    // console.log('str')
+    // console.log(str)
 
-    if (secure_hash === hasedStr) {
+    // console.log('secure_hash')
+    // console.log(secure_hash)
 
-        const order = await Order.findOne({ orderId: order_id })
+    // console.log('hasedStr')
+    // console.log(hasedStr)
+
+    const order = await Order.findOne({ orderId: order_id })
+    if (secure_hash == hasedStr) {
+
         if (success) {
             await Order.findByIdAndUpdate(order._id, {
                 paymentInfo: {
                     status: 'paid'
                 }
             })
+            return res.status(200)
         } else {
             await Order.findByIdAndUpdate(order._id, {
                 paymentInfo: {
                     status: 'declined'
                 }
             })
+            return res.status(200)
         }
 
-        return res.status(200)
 
     } else {
+        await Order.findByIdAndUpdate(order._id, {
+            paymentInfo: {
+                status: 'declined'
+            }
+        })
+        console.log('error')
         return res.status(400)
 
     }
