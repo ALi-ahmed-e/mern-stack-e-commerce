@@ -78,6 +78,9 @@ const processedcallback = async (req, res) => {
     // console.log('str')
     // console.log(str)
 
+    console.log('resp.obj')
+    console.log(respo.obj)
+
     console.log('secure_hash')
     console.log(secure_hash)
 
