@@ -78,11 +78,11 @@ const processedcallback = async (req, res) => {
     // console.log('str')
     // console.log(str)
 
-    // console.log('secure_hash')
-    // console.log(secure_hash)
+    console.log('secure_hash')
+    console.log(secure_hash)
 
-    // console.log('hasedStr')
-    // console.log(hasedStr)
+    console.log('hasedStr')
+    console.log(hasedStr)
 
     const order = await Order.findOne({ orderId: order_id })
     if (secure_hash == hasedStr) {
